@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from joblib import load
 
 # Local application/library specific imports
-from data_classes.manage_dataset import ChestXrayDataset
+from data_classes.manage_dataset import PolyU_HRF_DBII
 from model_classes.resnet_model import ResNet, ResidualBlock
 from model_classes.alexnet_model import AlexNet
 from utils import *
@@ -94,13 +94,8 @@ def test_ml_model(model_name, config, device, test_dataset):
     print("Evaluating model..\n")
     # Evaluate the performance of the SVM model on the test_dataset
     svm_metrics = compute_metrics(test_dataset_svm.labels, svm_model.predict(test_dataset_svm.features))
-    # If it is a binary classification, use hinge_loss as the loss function; otherwise, use log_loss
-    if config.classification.type.lower() == 'binary':
-        # Compute the loss using hinge_loss
-        svm_metrics['loss'] = hinge_loss(test_dataset_svm.labels, svm_model.predict(test_dataset_svm.features))
-    else:
-        # Compute the loss using log_loss
-        svm_metrics['loss'] = log_loss(test_dataset_svm.labels, svm_model.predict_proba(test_dataset_svm.features))
+    # Compute the loss using log_loss
+    svm_metrics['loss'] = log_loss(test_dataset_svm.labels, svm_model.predict_proba(test_dataset_svm.features))
     # Compute the confusion matrix for test
     svm_conf_matrix = confusion_matrix(test_dataset_svm.labels, svm_model.predict(test_dataset_svm.features))
     # Prints the confusion matrix of SVM model
@@ -150,7 +145,7 @@ def test_dl_model(model_name, config, device, test_dataset):
         model = ResNet(
             ResidualBlock,
             config.ResNet_model.layers,
-            config.classification.type,
+            config.classification.number_of_classes,
             config.ResNet_model.stride,
             config.ResNet_model.padding,
             config.ResNet_model.kernel,
@@ -163,7 +158,7 @@ def test_dl_model(model_name, config, device, test_dataset):
     # AlexNet Model
     else:
         model = AlexNet(
-            config.classification.type,
+            config.classification.number_of_classes,
             config.AlexNet_model.stride,
             config.AlexNet_model.padding,
             config.AlexNet_model.kernel,
@@ -248,7 +243,7 @@ if __name__ == '__main__':
     # ---------------------
     
     # Create the test_dataset item
-    test_dataset  = ChestXrayDataset(type='test', root=config.data)
+    test_dataset  = PolyU_HRF_DBII(type='test', root=config.data)
     
     # ---------------------
     # 4. Get saved model

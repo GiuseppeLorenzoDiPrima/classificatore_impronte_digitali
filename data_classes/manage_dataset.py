@@ -40,7 +40,7 @@ transformation = {
 # Class that defines the dataset
 class PolyU_HRF_DBII(Dataset):
     """
-    A Dataset for chest X-ray images.
+    A Dataset for PolyU_HRF_DBII images.
     """
     def __init__(self, type=None, root='data', classes=None):
         """
