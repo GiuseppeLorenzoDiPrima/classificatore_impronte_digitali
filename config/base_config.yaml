@@ -13,7 +13,7 @@ training:
   learning_rate: 0.001
 
 deep_learning_training:
-  epochs: 40
+  epochs: 25
   batch_size: 32 # Used for training in the case of deep learning models
   optimizer: adam # Choose one: adam, sgd or rmsprop
   warmup_ratio: 0.1 # Used for faster convergence
