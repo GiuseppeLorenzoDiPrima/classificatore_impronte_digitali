@@ -8,15 +8,18 @@ import matplotlib.pyplot as plt
 # Local application/library specific imports
 from utils import save_graph
 
+
 # Transformation to apply to the dataset divided according to training, validation and testing
 transformation = {
     'training' : transforms.Compose([
             transforms.Resize((224, 224)),  
             transforms.CenterCrop(224),
             transforms.Grayscale(num_output_channels=1),
+            transforms.ColorJitter(brightness=0.7, contrast=0.6),
+            transforms.GaussianBlur(kernel_size=(3, 3), sigma=(0.1, 2.0)),
             # transforms.RandomHorizontalFlip(p=1),
-            # transforms.RandomRotation(10),
-            # transforms.RandomAffine(translate=(0.1, 0.05), degrees=10),
+            # transforms.RandomRotation(5),
+            # transforms.RandomAffine(translate=(0.1, 0.05), degrees=5),
             transforms.ToTensor(),
             transforms.Normalize((0.5,), (0.5))
         ]),
@@ -36,13 +39,11 @@ transformation = {
         ]),
 }
 
-
-# Class that defines the dataset
 class PolyU_HRF_DBII(Dataset):
     """
     A Dataset for PolyU_HRF_DBII images.
     """
-    def __init__(self, type=None, root='data', classes=None):
+    def __init__(self, type=None, root='data'):
         """
         A Dataset for PolyU_HRF_DBII images.
 
@@ -84,9 +85,11 @@ class PolyU_HRF_DBII(Dataset):
     def __getitem__(self, idx):
         if self.data:
             image, label = self.data[idx]
+            image_path = self.data.samples[idx][0]
             item = {
                 'image' : image,
-                'label' : label
+                'label' : label,
+                # 'image_path': image_path
             }
             return item
         else:

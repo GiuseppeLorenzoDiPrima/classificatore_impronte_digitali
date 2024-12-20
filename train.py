@@ -11,11 +11,9 @@ import os
 import torch
 import torch.nn as nn
 from tqdm import tqdm
-import pandas as pd
-import numpy as np
 from joblib import dump
 from sklearn import svm
-from sklearn.metrics import hinge_loss, log_loss
+from sklearn.metrics import log_loss
 
 # Configuration and utility imports
 from yaml_config_override import add_arguments
@@ -24,7 +22,7 @@ from addict import Dict
 # Local application/library specific imports
 from data_classes.manage_dataset import *
 from model_classes.resnet_model import ResNet, ResidualBlock
-from model_classes.alexnet_model import AlexNet
+from model_classes.CNN_model import CNN
 from utils import *
 from extract_representations.vision_embeddings import VisionEmbeddings
 
@@ -115,8 +113,8 @@ def manage_best_model_and_metrics(model, evaluation_metric, val_metrics, best_va
         # Verify the model for which a new best model has been found
         if str(type(model)) == '<class \'model_classes.resnet_model.ResNet\'>':
              print(f"New best ResNet model found with val {evaluation_metric}: {val_metrics[evaluation_metric]:.4f}")
-        elif str(type(model)) == '<class \'model_classes.alexnet_model.AlexNet\'>':
-             print(f"New best AlexNet model found with val {evaluation_metric}: {val_metrics[evaluation_metric]:.4f}")
+        elif str(type(model)) == '<class \'model_classes.CNN_model.CNN\'>':
+             print(f"New best CNN model found with val {evaluation_metric}: {val_metrics[evaluation_metric]:.4f}")
         # Store the new best validation metrics and the new best model
         best_val_metric = val_metrics
         best_model = model
@@ -149,7 +147,7 @@ def train_model(model, config, train_dl, val_dl, device, criterion):
     if str(type(model)) == '<class \'model_classes.resnet_model.ResNet\'>':
         string_model = "ResNet model -"
     else:
-        string_model = "AlexNet model -"
+        string_model = "CNN model -"
     # Select the optimization algorithm based on the configuration chosen in the config
     if config.deep_learning_training.optimizer.lower() == 'adam':
         optimizer = torch.optim.Adam(model.parameters(), lr=config.training.learning_rate)
@@ -227,7 +225,7 @@ def evaluate_model(best_val_metric, best_model, test_set, criterion, device, typ
     :type criterion: torch.nn.modules.loss._Loss
     :param device: The device on which to evaluate the model (e.g., 'cpu', 'cuda').
     :type device: str
-    :param type_model: The type of the model (e.g., 'ResNet', 'AlexNet').
+    :param type_model: The type of the model (e.g., 'ResNet', 'CNN').
     :type type_model: str
     :return: Returns the metrics and confusion matrix for the test dataset.
     :rtype: tuple (list, numpy.ndarray)
@@ -355,7 +353,7 @@ def train_dl_model(model_name, config, device, train_dataset, val_dataset, test_
     """
     This function trains a deep learning model and evaluates its performance.
 
-    :param model_name: The name of the model to be trained (e.g., 'ResNet', 'AlexNet').
+    :param model_name: The name of the model to be trained (e.g., 'ResNet', 'CNN').
     :type model_name: str
     :param config: The configuration settings for training the model.
     :type config: object
@@ -431,15 +429,15 @@ def train_dl_model(model_name, config, device, train_dataset, val_dataset, test_
         )
         model.to(device)
         
-    # AlexNet model
+    # CNN model
     else:
-        model = AlexNet(
+        model = CNN(
         config.classification.number_of_classes,
-        config.AlexNet_model.stride,
-        config.AlexNet_model.padding,
-        config.AlexNet_model.kernel,
-        config.AlexNet_model.channels_of_color,
-        config.AlexNet_model.inplace,
+        config.CNN_model.stride,
+        config.CNN_model.padding,
+        config.CNN_model.kernel,
+        config.CNN_model.channels_of_color,
+        config.CNN_model.inplace,
         )
         model.to(device)
 

@@ -1,39 +1,54 @@
 # Third-party imports
 import torch
-import torch.nn as nn
+import shutil
 from joblib import load
+from PIL import Image
+import os
+from torchvision import transforms
+from torch.utils.data import Dataset
 
 # Local application/library specific imports
-from data_classes.manage_dataset import PolyU_HRF_DBII
 from model_classes.resnet_model import ResNet, ResidualBlock
 from model_classes.CNN_model import CNN
-from utils import *
 from extract_representations.vision_embeddings import VisionEmbeddings
 from sklearn import svm
-from sklearn.metrics import log_loss
 
 # Configuration and utility imports
 from yaml_config_override import add_arguments
 from addict import Dict
 
-# Print test set performance metrics
-def print_metrics(list_of_metrics, saved_models):
-    """
-    Prints the metrics.
 
-    :param list_of_metrics: The list of metrics to print.
-    :type list_of_metrics: list of dict
-    :param saved_models: The list of saved model names.
-    :type saved_models: list of str
-    """
-    for idx, metrics in enumerate(list_of_metrics):
-        print("\n" + saved_models[idx] + " model performance:\n")
-        # Scrolls through the dictionary and prints performance metrics
-        for key, value in metrics.items():
-            print(f"Test {key}: {value:.4f}")
+class_names = ['Accidental Whorl', 'Central Pocket Loop Whorl', 'Double Loop Whorl', 'Plain Arch', 'Plain Whorl', 'Radial Loop', 'Tended Arch', 'Ulnar Loop']
 
-# Test the machine learning model
-def test_ml_model(model_name, config, test_dataset):
+# Definisci le trasformazioni da applicare alle immagini
+transform = transforms.Compose([
+    transforms.Resize((224, 224)),  
+    transforms.CenterCrop(224),
+    transforms.Grayscale(num_output_channels=1),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5))
+])
+
+
+# Crea una classe Dataset personalizzata
+class PolyU_HRF_DBII(Dataset):
+    def __init__(self, image_folder, transform=None):
+        self.image_folder = image_folder
+        self.transform = transform
+        self.image_paths = [os.path.join(image_folder, img) for img in os.listdir(image_folder) if img.endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff'))]
+
+    def __len__(self):
+        return len(self.image_paths)
+
+    def __getitem__(self, idx):
+        img_path = self.image_paths[idx]
+        image = Image.open(img_path).convert('RGB')
+        if self.transform:
+            image = self.transform(image)
+        return image, img_path
+
+# Classify with  machine learning model
+def classify_ml_model(model_name, config, dataset):
     """
     This function tests a machine learning model on a test dataset.
 
@@ -57,7 +72,7 @@ def test_ml_model(model_name, config, test_dataset):
     # Create vision_embedding object
     vision_embeddings = VisionEmbeddings()
     # Create the dataset containing features for the svm model
-    test_dataset_svm = vision_embeddings.extract_single_dataset(test_dataset, pca, 'test', config.graph.create_model_graph, config.graph.view_model_graph)
+    dataset_svm = vision_embeddings.extract_single_dataset(dataset, pca, 'classification', False, False)
     print("---------------------")
     
     # ---------------------
@@ -85,27 +100,22 @@ def test_ml_model(model_name, config, test_dataset):
     print("---------------------")
     
     # ---------------------
-    # 4. Evaluate
+    # 4. classify
     # ---------------------
     
-    print("Evaluating model..\n")
-    # Evaluate the performance of the SVM model on the test_dataset
-    svm_metrics = compute_metrics(test_dataset_svm.labels, svm_model.predict(test_dataset_svm.features))
-    # Compute the loss using log_loss
-    svm_metrics['loss'] = log_loss(test_dataset_svm.labels, svm_model.predict_proba(test_dataset_svm.features))
-    # Compute the confusion matrix for test
-    svm_conf_matrix = confusion_matrix(test_dataset_svm.labels, svm_model.predict(test_dataset_svm.features))
-    # Prints the confusion matrix of SVM model
-    print_confusion_matrix(svm_conf_matrix, type_model=model_name)
-    print("---------------------")
-    # Depending on the configuration you choose, create graphs for confusion matrix
-    if config.graph.create_model_graph:
-        print_confusion_matrix_graph(svm_conf_matrix, config.graph.view_model_graph, type_model=model_name, test=True)
-        
-    return svm_metrics
+    # Classifica e sposta le immagini
+    for features, img_paths in zip(dataset_svm.features, dataset_svm.path):
+        # Predici la classe con SVM
+        pred = svm_model.predict([features])[0]
+        class_name = config.classification.class_names[pred]
+        class_folder = os.path.join(config.classification.output_folder, class_name)
+        os.makedirs(class_folder, exist_ok=True)
+        shutil.move(img_paths, os.path.join(class_folder, os.path.basename(img_paths)))
+        print(f"Image {os.path.basename(img_paths)} classified as: {class_name}. It was moved to {class_folder}")
+    
 
-# Test the deep learning model
-def test_dl_model(model_name, config, device, test_dataset):
+# Classify with deep learning model
+def classify_dl_model(model_name, config, device, dataset):
     """
     This function tests a deep learning model on a test dataset.
 
@@ -125,9 +135,9 @@ def test_dl_model(model_name, config, device, test_dataset):
     # 1. Load data
     # ---------------------
     
-    # Loading the test_dataset
-    test_dl = torch.utils.data.DataLoader(
-        test_dataset,
+    # Create a dataloader
+    dataloader = torch.utils.data.DataLoader(
+        dataset,
         batch_size=config.deep_learning_training.batch_size,
         shuffle=False # Without shuffling the data
     )
@@ -175,33 +185,27 @@ def test_dl_model(model_name, config, device, test_dataset):
     print("---------------------")
     
     # ---------------------
-    # 4. Criterion
+    # 4. classify
     # ---------------------
     
-    # Defines the CrossEntropyLoss as loss functions for deep learning model
-    criterion = nn.CrossEntropyLoss()
-    
-    # ---------------------
-    # 5. Evaluate
-    # ---------------------
-    
-    print("Evaluating model...\n")
-    # Evaluate model performance
-    metrics, conf_matrix = evaluate(model, test_dl, criterion, device)
-    # Prints the confusion matrix of the model
-    print_confusion_matrix(conf_matrix, type_model=model_name)
-    print("---------------------")
-    # Print confusion matrices graphs
-    if config.graph.create_model_graph:
-        print_confusion_matrix_graph(conf_matrix, config.graph.view_model_graph, type_model=model_name, test=True)
-    
-    return metrics
+    model.eval()
+    with torch.no_grad():
+        for images, img_paths in dataloader:
+            images = images.to(device)
+            outputs = model(images)
+            _, preds = torch.max(outputs, 1)
+            for img_path, pred in zip(img_paths, preds):
+                class_name = class_names[pred]
+                class_folder = os.path.join(config.classification.output_folder, class_name)
+                os.makedirs(class_folder, exist_ok=True)
+                shutil.move(img_path, os.path.join(class_folder, os.path.basename(img_path)))
+                print(f"Image {os.path.basename(img_path)} classified as: {class_name}. It was moved to {class_folder}")
 
 
 # Main
 if __name__ == '__main__':
     """
-    The main script for testing the models.
+    The main script for classifing fingerprints.
 
     The script performs the following steps:
     
@@ -209,9 +213,7 @@ if __name__ == '__main__':
     2. Set device
     3. Load data
     4. Get saved model
-    5. Test on saved models
-    6. Print performance    
-    7. Compare performance
+    5. Classify on saved models and move classified fingerpints  
     """
     
     # ---------------------
@@ -222,7 +224,6 @@ if __name__ == '__main__':
     config = Dict(add_arguments())
     
     # ---------------------
-    
     # 2. Set device
     # ---------------------
     
@@ -239,63 +240,39 @@ if __name__ == '__main__':
     # 3. Load data
     # ---------------------
     
-    # Create the test_dataset item
-    test_dataset  = PolyU_HRF_DBII(type='test', root=config.data)
-    
+    path = os.getcwd()
+    if not os.path.exists(os.path.join(path + "/", config.classification.image_folder)):
+        os.makedirs(os.path.join(path + "/", config.classification.image_folder))
+    if not os.path.exists(os.path.join(path + "/", config.classification.output_folder)):
+        os.makedirs(os.path.join(path + "/", config.classification.output_folder))
+
+    # Load fingerprints
+    dataset = PolyU_HRF_DBII(config.classification.image_folder, transform)
+
     # ---------------------
     # 4. Get saved model
     # ---------------------
     
-    # Get the current path
-    path = os.getcwd()
-    if not os.path.exists(os.path.join(path, config.training.checkpoint_dir)):
-        os.makedirs(os.path.join(path, config.training.checkpoint_dir))
+    if not os.path.exists(os.path.join(path + "/", config.training.checkpoint_dir)):
+        os.makedirs(os.path.join(path + "/", config.training.checkpoint_dir))
     # Get path of saved models
-    saved_models_path = os.listdir(os.path.join(path, config.training.checkpoint_dir))
-    # Get name of saved models
-    saved_models = get_name(saved_models_path)
-    
-    # ---------------------
-    # 5. Test on saved models
-    # ---------------------
-    
-    metrics_list = []
-    # Perform the intersection between the list config.model.model_to_test and saved_models to store only the models that have already been trained and that you want to test
-    model_to_test = [model for model in saved_models if model in config.model.model_to_test]
-    for model in model_to_test:
-        # Test SVM model
-        if 'svm' in model.lower():
-            metrics = test_ml_model(model, config, test_dataset)
-        # Test deep learning models
-        else:
-            metrics = test_dl_model(model, config, device, test_dataset)
-            
-        # Store the performances in a list
-        metrics_list.append(metrics)
+    saved_models_path = os.listdir(os.path.join(path + "/", config.training.checkpoint_dir))
+    saved_models = [path.lower() for path in saved_models_path]
 
     # ---------------------
-    # 6. Print performance
+    # 5. Classify on saved models
     # ---------------------
-    
-    print("Performance:")
-    print_metrics(metrics_list, model_to_test)
-    print("---------------------")
-         
-    # ---------------------
-    # 7. Compare performance
-    # ---------------------
-    
-    # Extract metrics
-    values = extract_list_of_metrics(metrics_list)
-    
-    # The comparison makes sense if at least two models are tested
-    if len(model_to_test) > 1:
-        # Compare performance
-        compare_performance(values, model_to_test)
-        print("---------------------")
-        
-        # Print performance comparison results
-        if config.graph.create_compare_graph:
-            print_compare_graph(values, model_to_test, config.graph.view_compare_graph, test=True)
 
-    print("\nTest finish correctly.\n")
+    if 'resnet_best_model.pt' in saved_models:
+        model = torch.load(config.training.checkpoint_dir + "ResNet_best_model.pt")
+        classify_dl_model("ResNet", config, device, dataset)
+    elif 'cnn_best_model.pt' in saved_models:
+        model = torch.load(config.training.checkpoint_dir + "CNN_best_model.pt")
+        classify_dl_model("CNN", config, device, dataset)
+    elif 'svm_best_model.pkl' in saved_models:
+        model = torch.load(config.training.checkpoint_dir + "SVM_best_model.pkl")
+        #classify_ml_model("SVM", config, dataset)
+    else:
+        raise Exception("Error: no model saved.")
+
+    print("\nClassification finish correctly.\n")

@@ -8,8 +8,6 @@ from imblearn.over_sampling import SMOTE
 from joblib import dump
 
 # Standard library imports
-from PIL import Image
-import os
 import logging
 import warnings
 
@@ -280,7 +278,7 @@ class VisionEmbeddings:
         
         # --- Oversampling ---
         # Create the smote object
-        smote = SMOTE()
+        smote = SMOTE(sampling_strategy='auto', k_neighbors=2)
         # Oversample the training dataset
         new_train.features, new_train.labels = smote.fit_resample(new_train.features, new_train.labels)
         

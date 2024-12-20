@@ -1,5 +1,4 @@
 # Third-party imports
-import torch
 import torch.nn as nn
 
 # Class to define the ResidualBlock by inheriting nn.Module

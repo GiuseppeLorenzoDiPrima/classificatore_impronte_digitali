@@ -1,7 +1,5 @@
 # Third-party imports
 import torch
-import torch.nn as nn
-from tqdm import tqdm
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -10,10 +8,6 @@ import seaborn as sns
 
 # Standard library imports
 import os
-import tkinter
-
-# Local application/library specific imports
-from data_classes.manage_dataset import *
 
 
 # Calculate performance metrics
@@ -63,6 +57,13 @@ def evaluate(model, dataloader, criterion, device):
     running_loss = 0.0
     predictions = []
     references = []
+
+
+    misclassified = []
+    class_names = ['accidental whorl', 'central pocket loop whorl', 'double loop whorl', 'plain arch','plain whorl', 'radial loop', 'tended arch', 'ulnar loop']
+
+
+
     # Specify that you don't want to calculate the gradient to save computational power
     with torch.no_grad():
         # Iterates through all batches in the dataloader
@@ -70,7 +71,8 @@ def evaluate(model, dataloader, criterion, device):
             # Get images and targets
             images = batch['image'].to(device)
             labels = batch['label'].to(device)
-            # Calculate output
+            # Calculate ou
+            # tput
             outputs = model(images)
             # Calculate the loss through the previously chosen loss function
             loss = criterion(outputs, labels)
@@ -81,6 +83,19 @@ def evaluate(model, dataloader, criterion, device):
             predictions.extend(pred.cpu().numpy())
             # Compute refereces
             references.extend(labels.cpu().numpy())
+
+    # --- DEGUB --- See what type of error has happened
+
+    #         predictions_batch = pred.cpu().numpy()
+    #         labels_batch = labels.cpu().numpy()
+    #         # Identify misclassified samples
+    #         for i in range(len(labels_batch)):
+    #             if pred[i] != labels[i]:
+    #                 misclassified.append({ 'image_path': batch['image_path'][i], 'correct_label': class_names[labels_batch[i].item()], 'predicted_label': class_names[predictions_batch[i].item()] })
+    # # Print misclassified samples
+    # for error in misclassified:
+    #     print(f"Image: {error['image_path']}, Correct Class: {error['correct_label']}, Predicted Class: {error['predicted_label']}")
+
     # Compute performance metrics based on differences between predictiones and references
     val_metrics = compute_metrics(predictions, references)
     # Add loss to performance metrics
@@ -121,7 +136,7 @@ def print_metrics_graph(training_metrics, validation_metrics, metric_plotted, vi
     :type metric_plotted: String
     :param view: Whether to display the plot.
     :type view: bool
-    :param type_model: The type of the model (e.g., 'ResNet', 'AlexNet', 'SVM').
+    :param type_model: The type of the model (e.g., 'ResNet', 'CNN', 'SVM').
     :type type_model: String
     """
     # Print the graph with for all epochs for training and validation for each performance metric
@@ -266,7 +281,7 @@ def print_confusion_matrix_graph(conf_matrix, view, type_model, test):
     :type conf_matrix: numpy.ndarray
     :param view: Whether to display the plot.
     :type view: bool
-    :param type_model: The type of the model (e.g., 'ResNet', 'AlexNet', 'SVM').
+    :param type_model: The type of the model (e.g., 'ResNet', 'CNN', 'SVM').
     :type type_model: String
     :param test: Whether the model is in the testing phase.
     :type test: Bool
@@ -298,7 +313,7 @@ def print_confusion_matrix(conf_matrix, type_model):
 
     :param conf_matrix: The confusion matrix to print.
     :type conf_matrix: Numpy.ndarray
-    :param type_model: The type of the model (e.g., 'ResNet', 'AlexNet', 'SVM').
+    :param type_model: The type of the model (e.g., 'ResNet', 'CNN', 'SVM').
     :type type_model: String
     """
     print("Confusion matrix for " + str(type_model) + " model:")
@@ -410,8 +425,8 @@ def get_name(saved_models_path):
             name.append("SVM")
         elif "resnet" in path.lower():
             name.append("ResNet")
-        elif "alexnet" in path.lower():
-            name.append("AlexNet")
+        elif "cnn" in path.lower():
+            name.append("CNN")
     return name
 
 # Extract a list of metrics from a list of dictionaries
