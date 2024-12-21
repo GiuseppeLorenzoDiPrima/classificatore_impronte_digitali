@@ -22,11 +22,13 @@ def compute_metrics(predictions, references):
     :return: A dictionary containing the accuracy, precision, recall, and F1 score.
     :rtype: Dictionary
     """
+
     # Compute performance metrics: accuracy, precision, recall and f1
     acc = accuracy_score(references, predictions)
     precision = precision_score(references, predictions, average='macro', zero_division=0.0)
     recall = recall_score(references, predictions, average='macro', zero_division=0.0)
     f1 = f1_score(references, predictions, average='macro', zero_division=0.0)
+    
     # Return metrics to a dictionary
     return {
         'accuracy': acc,
@@ -51,6 +53,7 @@ def evaluate(model, dataloader, criterion, device):
     :return: Returns the evaluation metrics and confusion matrix.
     :rtype: tuple (dict, numpy.ndarray)
     """
+
     # Set the model to evaluation mode
     model.eval()
     # Initialize variables
@@ -58,11 +61,9 @@ def evaluate(model, dataloader, criterion, device):
     predictions = []
     references = []
 
-
-    misclassified = []
-    class_names = ['accidental whorl', 'central pocket loop whorl', 'double loop whorl', 'plain arch','plain whorl', 'radial loop', 'tended arch', 'ulnar loop']
-
-
+    # Used for debug
+    # misclassified = []
+    #class_names = ['accidental whorl', 'central pocket loop whorl', 'double loop whorl', 'plain arch','plain whorl', 'radial loop', 'tended arch', 'ulnar loop']
 
     # Specify that you don't want to calculate the gradient to save computational power
     with torch.no_grad():
@@ -71,8 +72,7 @@ def evaluate(model, dataloader, criterion, device):
             # Get images and targets
             images = batch['image'].to(device)
             labels = batch['label'].to(device)
-            # Calculate ou
-            # tput
+            # Calculate output
             outputs = model(images)
             # Calculate the loss through the previously chosen loss function
             loss = criterion(outputs, labels)
@@ -116,6 +116,7 @@ def compare_performance(metrics_list, model_to_train):
     :type model_to_train: list
     :return: None
     """
+
     print("Comparing performance:\n")
     # Initialize variables
     labels = ['Test accuracy', 'Test precision', 'Test recall', 'Test f1 score', 'Test loss']
@@ -139,7 +140,9 @@ def print_metrics_graph(training_metrics, validation_metrics, metric_plotted, vi
     :param type_model: The type of the model (e.g., 'ResNet', 'CNN', 'SVM').
     :type type_model: String
     """
+
     # Print the graph with for all epochs for training and validation for each performance metric
+    
     # For deep learning models
     if type(training_metrics) == list and type(validation_metrics) == list:
         for element in metric_plotted:
@@ -155,6 +158,7 @@ def print_metrics_graph(training_metrics, validation_metrics, metric_plotted, vi
                 plt.show()
             # Close the graph to avoid overlap
             plt.close()
+    
     # For machine learning models
     else: 
         for element in metric_plotted:
@@ -191,6 +195,7 @@ def print_compare_graph(metrics_list, model_to_train, view, test):
     :type test: bool
     :return: None
     """
+
     # Inizialize metris
     metrics = ['accuracy', 'precision', 'recall', 'f1', 'loss']
     # For each metric, print a graph
@@ -224,6 +229,7 @@ def print_compare_graph(metrics_list, model_to_train, view, test):
                     arrowprops=dict(arrowstyle='<->', color='red'))
         # Texts "Difference"
         plt.text(0.5, first_y_pos, f'Difference: {first_gap:.4f}', ha='center', va='center')
+        
         # Only in the case where you are interested in comparing the performance of three models
         if len(model_to_train) == 3:
             # Horizontal dashed lines at bar levels, compute gap and set y position to locate the texts "Difference"
@@ -261,6 +267,7 @@ def save_graph(filename, type_of_graph):
     :param type_of_graph: The type of the graph (e.g., 'Testing result', 'Compare performance').
     :type type_of_graph: String
     """
+
     # Get the current path
     path = os.getcwd()
     # Check if the graph folder exists, if not, create it
@@ -286,6 +293,7 @@ def print_confusion_matrix_graph(conf_matrix, view, type_model, test):
     :param test: Whether the model is in the testing phase.
     :type test: Bool
     """
+
     # Select color
     sns.color_palette("YlOrBr", as_cmap=True)
     # Create a heatmap with confusion matrix
@@ -316,6 +324,7 @@ def print_confusion_matrix(conf_matrix, type_model):
     :param type_model: The type of the model (e.g., 'ResNet', 'CNN', 'SVM').
     :type type_model: String
     """
+
     print("Confusion matrix for " + str(type_model) + " model:")
     # Based on the type of classification [binary or ternary], set the labels
     labels = ['ACCIDENTAL WHORL', 'CENTRAL POCKET LOOP WHORL', 'DOUBLE LOOP WHORL', 'PLAIN ARCH', 'PLAIN WHORL', 'RADIAL LOOP', 'TENDED ARCH', 'ULNAR LOOP']
@@ -333,6 +342,7 @@ def print_best_val_metrics(type_model, best_val_metric):
     :param best_val_metric: The best validation metrics.
     :type best_val_metric: Dictionary
     """
+
     print("Best " + type_model + " model performance on validation dataset:")
     # Print the performance of the best model based on the validation_dataset on which the test_dataset will be tested
     for key, value in best_val_metric.items():
@@ -349,6 +359,7 @@ def print_evaluation(test_metrics):
     :return: The test metrics as a list.
     :rtype: List
     """
+
     # Store performance in lists so you can pass it to the DataFrame
     metrics = [test_metrics['accuracy'], test_metrics['precision'], test_metrics['recall'], test_metrics['f1'], test_metrics['loss']]
     labels = ['Test accuracy', 'Test precision', 'Test recall', 'Test f1 score', 'Test loss']
@@ -369,6 +380,7 @@ def print_scree_graph(pca, test, view):
     :param view: Whether to view the graph or not.
     :type view: Bool
     """
+
     # Get the percentage value of the variance
     explained_variance_ratio = pca.explained_variance_ratio_
     # Plot values on bars
@@ -401,6 +413,7 @@ def extract_value(metrics):
     :return: Returns a list of the extracted values.
     :rtype: list
     """
+
     # Initialize an array
     values = []
     # Iterates through dictionary values and adds them to the list
@@ -419,6 +432,7 @@ def get_name(saved_models_path):
     :return: Returns a list of model names based on the file paths.
     :rtype: list
     """
+    
     name = []
     for path in saved_models_path:
         if "svm" in path.lower():

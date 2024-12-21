@@ -1,0 +1,29 @@
+model\_classes package
+======================
+
+Submodules
+----------
+
+model\_classes.CNN\_model module
+--------------------------------
+
+.. automodule:: model_classes.CNN_model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+model\_classes.resnet\_model module
+-----------------------------------
+
+.. automodule:: model_classes.resnet_model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: model_classes
+   :members:
+   :undoc-members:
+   :show-inheritance:

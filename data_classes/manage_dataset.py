@@ -17,9 +17,6 @@ transformation = {
             transforms.Grayscale(num_output_channels=1),
             transforms.ColorJitter(brightness=0.7, contrast=0.6),
             transforms.GaussianBlur(kernel_size=(3, 3), sigma=(0.1, 2.0)),
-            # transforms.RandomHorizontalFlip(p=1),
-            # transforms.RandomRotation(5),
-            # transforms.RandomAffine(translate=(0.1, 0.05), degrees=5),
             transforms.ToTensor(),
             transforms.Normalize((0.5,), (0.5))
         ]),
@@ -39,6 +36,8 @@ transformation = {
         ]),
 }
 
+
+# Custom class to create PolyU_HRF_DBII dataset
 class PolyU_HRF_DBII(Dataset):
     """
     A Dataset for PolyU_HRF_DBII images.
@@ -51,9 +50,8 @@ class PolyU_HRF_DBII(Dataset):
         :type type: str
         :param root: The root directory of the dataset.
         :type root: str
-        :param classes: The classes in the dataset.
-        :type classes: list
         """
+
         # Initializing the variable
         path = ""
 
@@ -72,6 +70,7 @@ class PolyU_HRF_DBII(Dataset):
             self.data = ImageFolder(path, transform=transformation['validation'])
         else:
             self.data = ImageFolder(path, transform=transformation['testing'])
+        
         # Sets variables
         self.classes = self.data.classes
         self.targets = self.data.targets
@@ -89,7 +88,7 @@ class PolyU_HRF_DBII(Dataset):
             item = {
                 'image' : image,
                 'label' : label,
-                # 'image_path': image_path
+                # 'image_path': image_path # Used for debug
             }
             return item
         else:
@@ -106,6 +105,7 @@ def class_count(dataset):
     :return: Returns a numpy array containing the counts of each class.
     :rtype: numpy.ndarray
     """
+
     # Initialize an array of the same size as the classes to zero
     elemets = np.zeros(len(dataset.classes))
     # Retrieve the labels
@@ -121,8 +121,6 @@ def print_shapes(train_dataset, val_dataset, test_dataset):
     """
     Prints the shapes of the datasets.
 
-    :param type: The type of the datasets (e.g., 'before', 'after').
-    :type type: str
     :param train_dataset: The training dataset.
     :type train_dataset: Dataset
     :param val_dataset: The validation dataset.
@@ -130,14 +128,16 @@ def print_shapes(train_dataset, val_dataset, test_dataset):
     :param test_dataset: The test dataset.
     :type test_dataset: Dataset
     """
+
     # Count classes for each dataset
     train_class_counts = class_count(train_dataset)
     val_class_counts = class_count(val_dataset)
     test_class_counts = class_count(test_dataset)
+    
     # Print that you are printing datasets shapes
     print("Datasets shapes:\n")
 
-    # Print binary dataset
+    # Print each dataset size splitted by classes
     print(f"Train size: {len(train_dataset)}")
     print(f"\t- Train accidental whorl: {int(train_class_counts[0])}")
     print(f"\t- Train central pocket loop whorl: {int(train_class_counts[1])}")
@@ -147,6 +147,7 @@ def print_shapes(train_dataset, val_dataset, test_dataset):
     print(f"\t- Train radial loop: {int(train_class_counts[5])}")
     print(f"\t- Train tended arch: {int(train_class_counts[6])}")
     print(f"\t- Train ulnar loop: {int(train_class_counts[7])}")
+
     print(f"Validation size: {len(val_dataset)}")
     print(f"\t- Validation accidental whorl: {int(val_class_counts[0])}")
     print(f"\t- Validation central pocket loop whorl: {int(val_class_counts[1])}")
@@ -156,6 +157,7 @@ def print_shapes(train_dataset, val_dataset, test_dataset):
     print(f"\t- Validation radial loop: {int(val_class_counts[5])}")
     print(f"\t- Validation tended arch: {int(val_class_counts[6])}")
     print(f"\t- Validation ulnar loop: {int(val_class_counts[7])}")
+
     print(f"Test size: {len(test_dataset)}")
     print(f"\t- Test accidental whorl: {int(test_class_counts[0])}")
     print(f"\t- Test central pocket loop whorl: {int(test_class_counts[1])}")
@@ -178,6 +180,7 @@ def visualize_class_distribution(dataset, dataset_name, view):
     :param view: Whether to display the plot.
     :type view: bool
     """
+
     # Initialize a vector to zero
     class_counts = np.zeros(len(dataset.classes))
     # Fills the vector with the number of elements for each class
@@ -196,7 +199,7 @@ def visualize_class_distribution(dataset, dataset_name, view):
     # Closes the graph to avoid overlap
     plt.close()
     
-# Invoke the visualize_class_distribution once for each dataset [Train, Validation, and Test]
+# Invoke the visualize_class_distribution once for each dataset [Train, Validation and Test]
 def print_dataset_graph(train_dataset, val_dataset, test_dataset, view):
     """
     Prints the class distribution graph for the train, validation, and test datasets.
@@ -209,30 +212,31 @@ def print_dataset_graph(train_dataset, val_dataset, test_dataset, view):
     :type test_dataset: Dataset
     :param view: Whether to display the plots.
     :type view: bool
-    :param resize: Whether to resize the plots.
-    :type resize: bool
     """
+
     # Print graphs
     print("\nDrawing graph for class distribution in dataset...")
     visualize_class_distribution(train_dataset, "Train", view)
     visualize_class_distribution(val_dataset, "Validation", view)
     visualize_class_distribution(test_dataset, "Test", view)
 
-# Creates dataset objects and redistributes data between Train and Validation sets
+# Creates dataset objects
 def load_datasets(config):
     """
-    Loads the train, validation, and test datasets.
+    Loads the train, validation and test datasets.
 
     :param config: The configuration for loading the datasets.
     :type config: Config
-    :return: Returns the train, validation, and test datasets.
+    :return: Returns the train, validation and test datasets.
     :rtype: tuple (Dataset, Dataset, Dataset)
     """
+
     # Create objects of the PolyU_HRF_DBII class for each dataset
     train_dataset = PolyU_HRF_DBII(type='train', root=config.data)
     val_dataset  = PolyU_HRF_DBII(type='val', root=config.data)
     test_dataset  = PolyU_HRF_DBII(type='test', root=config.data)
-    # Print statistics before
+    
+    # Print statistics
     print_shapes(train_dataset, val_dataset, test_dataset)
     # If the user expressed the preference in the base_config file, it create the graph
     if config.graph.create_dataset_graph:

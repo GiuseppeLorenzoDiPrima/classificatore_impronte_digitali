@@ -36,10 +36,12 @@ class SVM_dataset:
         :param path: Path to the dataset.
         :type path: String
         """
+
         # Set variables
         self.classes = classes
         self.targets = targets
         self.path = path
+
         # Inizialize variables
         self.data = []
         self.features = None
@@ -61,9 +63,10 @@ class VisionEmbeddings:
 
         :param model_name: Name of the pre-trained ViT model.
         :type : String
-        :param device: Device (e.g., 'cuda' or 'cpu') for inference.
+        :param device: Device (e.g. 'cuda' or 'cpu') for inference.
         :type : String
         """
+
         # Set model to extract embeddings
         self.feature_extractor = ViTImageProcessor.from_pretrained(model_name)
         self.model = ViTModel.from_pretrained(model_name)
@@ -74,31 +77,31 @@ class VisionEmbeddings:
         # Set evaluation mode
         self.model.eval()
         
-    # Denormalize the tensors normalized by the transoform function when loading the ChestXray dataset
+    # Denormalize the tensors normalized by the transoform function when loading the PolyU_HRF_DBII dataset
     def denormalize(self, tensor, mean, std):
         """
         Denormalizes a tensor using mean and standard deviation.
 
         :param tensor: Input tensor.
         :type tensor: torch.Tensor
-        :param mean: List of mean values.
-        :type mean: List
-        :param std: List of standard deviation values.
-        :type std: List
+        :param mean: Mean value.
+        :type mean: Float
+        :param std: Standard deviation value.
+        :type std: Float
         :return: Denormalized tensor.
         :rtype: torch.Tensor
         """
         tensor.mul_(std).add_(mean)
         return tensor
     
-        # Starting from a dataset of tensors, obtain the same dataset with features thanks to the embeddings method
+    # Starting from a dataset of tensors, obtain the same dataset with features thanks to the embeddings method
     def extract(self, dataset, dataset_type):
         """
         Extracts embeddings from the dataset.
 
         :param dataset: Input dataset.
         :type dataset: SVM_dataset
-        :param dataset_type: Type of the dataset (e.g., 'train', 'test').
+        :param dataset_type: Type of the dataset (e.g. 'train', 'validation' and 'test').
         :type dataset_type: String
         :return: New dataset with extracted features.
         :rtype: SVM_dataset
@@ -113,19 +116,25 @@ class VisionEmbeddings:
             :return: Three channel image tensor.
             :rtype: torch.Tensor
             """
+
             return image.repeat(3, 1, 1)
     
         # Create a new SVM_dataset object
         new_dataset = SVM_dataset(dataset.classes, dataset.targets, dataset.path)
+        
         # For each element of the dataset
-        for idx, sample in enumerate(tqdm(dataset, desc='Vision embeddings for ' + dataset_type)):
-            # Denormalize the image tensor
+        for _, sample in enumerate(tqdm(dataset, desc='Vision embeddings for ' + dataset_type)):
+            # Inizialize variables
             image = sample['image']
+            if dataset_type.lower() == 'classification':
+                sample['label'] = None
+
+            # Denormalize the image tensor
             mean = 0.5
             std = 0.5
             image = self.denormalize(image, mean, std)
 
-             # Replicate single channel to three channels
+            # Replicate single channel to three channels
             if image.size(0) == 1:
                 image = replicate_channels(image)
 
@@ -135,14 +144,17 @@ class VisionEmbeddings:
             with torch.no_grad():
                 outputs = self.model(**inputs)
             features = outputs.last_hidden_state.mean(dim=1).detach().cpu().numpy()
+            
             # Convert the result to a list
             features = features.flatten().tolist()
             new_item = {
                 'feature': features,
                 'label': sample['label']
             }
+            
             # Adds the list containing the features
             new_dataset.data.append(new_item)
+        
         # Return dataset
         return new_dataset
     
@@ -156,6 +168,7 @@ class VisionEmbeddings:
         :return: Features as a numpy array.
         :rtype: np.ndarray
         """
+
         # Inizialize a list
         items = []
         # Add features to a list (list of list)
@@ -175,6 +188,7 @@ class VisionEmbeddings:
         :return: List of labels.
         :rtype: List
         """
+
         # Inizialize a list
         labels = []
         # Add labels to a list
@@ -193,6 +207,7 @@ class VisionEmbeddings:
         :return: Features, labels, number of features, and number of samples.
         :rtype: tuple
         """
+
         # Compute attributes
         features = self.get_features(dataset)
         labels = self.get_labels(dataset)
@@ -218,6 +233,7 @@ class VisionEmbeddings:
         :return: New dataset with transformed features.
         :rtype: SVM_dataset
         """
+
         # Compute attributes
         new_dataset = self.extract(dataset, dataset_type=type_of_dataset)
         new_dataset.features, new_dataset.labels, new_dataset.num_of_features, new_dataset.num_of_samples = self.extract_from_dataset(new_dataset)
@@ -250,18 +266,22 @@ class VisionEmbeddings:
         :type create: Bool
         :param view: View for the scree graph.
         :type view: Bool
-        :return: New training, validation, and test datasets with transformed features.
+        :return: New training, validation and test datasets with transformed features.
         :rtype: tuple (new_train, new_validation, new_test)
         """
+
         # Extract the three sets
         new_train = self.extract(train, dataset_type='train')
         new_validation = self.extract(validation, dataset_type='validation')
         new_test = self.extract(test, dataset_type='test')
+        
         # Compute attributes for the three datasets
         new_train.features, new_train.labels, new_train.num_of_features, new_train.num_of_samples = self.extract_from_dataset(new_train)
         new_validation.features, new_validation.labels, new_train.num_of_features, new_validation.num_of_samples = self.extract_from_dataset(new_validation)
         new_test.features, new_test.labels, new_train.num_of_features, new_test.num_of_samples = self.extract_from_dataset(new_test)
+        
         # --- PCA ---
+        
         # Set the number of components to keep after PCA
         n_components = num_features
         # Create a PCA object
@@ -277,6 +297,7 @@ class VisionEmbeddings:
             print_scree_graph(pca, False, view)
         
         # --- Oversampling ---
+        
         # Create the smote object
         smote = SMOTE(sampling_strategy='auto', k_neighbors=2)
         # Oversample the training dataset
@@ -286,6 +307,7 @@ class VisionEmbeddings:
         new_train.num_of_samples, new_train.num_of_features = new_train.features.shape
         new_validation.num_of_samples, new_validation.num_of_features = new_validation.features.shape
         new_test.num_of_samples, new_test.num_of_features = new_test.features.shape
+        
         # Store the pca object in the "../pca.joblib" file
         dump(pca, f"{path}/pca.joblib")
         # Return new datasets

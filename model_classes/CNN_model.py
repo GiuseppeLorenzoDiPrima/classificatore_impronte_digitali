@@ -6,12 +6,13 @@ class CNN(nn.Module):
     """
     A PyTorch implementation of the CNN model.
     """
+
     def __init__(self, number_of_classes, stride_size, padding_size, kernel_size, channels_of_color, inplace):
         """
         A PyTorch implementation of the CNN model.
 
-        :param type_net: Number of classes to classify
-        :type type_net: int
+        :param number_of_classes: Number of classes to classify
+        :type number_of_classes: int
         :param stride_size: The stride size for the convolutional layers.
         :type stride_size: list
         :param padding_size: The padding size for the convolutional layers.
@@ -23,11 +24,14 @@ class CNN(nn.Module):
         :param inplace: Whether to use inplace ReLU.
         :type inplace: bool
         """
+
         super(CNN, self).__init__()
+
         # Conv2d -> Convolutional layer
         # ReLU -> Activation function
         # MaxPool2d -> Pooling layer
         # BatchNorm2d -> Regularization function
+
         self.features = nn.Sequential(
             nn.Conv2d(channels_of_color, 128, kernel_size=kernel_size[0], stride=stride_size[0], padding=padding_size[0]),
             nn.BatchNorm2d(128),
@@ -52,9 +56,11 @@ class CNN(nn.Module):
             nn.ReLU(inplace=inplace),
             nn.MaxPool2d(kernel_size=kernel_size[2], stride=stride_size[1]),
         )
+
         # Dropout -> Regularization function
         # Linear -> Linear layer
         # ReLU -> Activation function
+
         self.classifier = nn.Sequential(
             nn.Dropout(),
             nn.Linear(512 * 6 * 6, 4096),
@@ -75,6 +81,7 @@ class CNN(nn.Module):
         :return: Returns the output of the network.
         :rtype: torch.Tensor
         """
+        
         x = self.features(x)
         x = x.view(x.size(0), 512 * 6 * 6)
         x = self.classifier(x)

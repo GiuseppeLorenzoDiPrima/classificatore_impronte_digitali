@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>data_classes package &mdash; PolyU HRF DBII 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            PolyU HRF DBII
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">data_classes package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-data_classes.manage_dataset">data_classes.manage_dataset module</a><ul>
+<li><a class="reference internal" href="#data_classes.manage_dataset.PolyU_HRF_DBII"><code class="docutils literal notranslate"><span class="pre">PolyU_HRF_DBII</span></code></a></li>
+<li><a class="reference internal" href="#data_classes.manage_dataset.class_count"><code class="docutils literal notranslate"><span class="pre">class_count()</span></code></a></li>
+<li><a class="reference internal" href="#data_classes.manage_dataset.load_datasets"><code class="docutils literal notranslate"><span class="pre">load_datasets()</span></code></a></li>
+<li><a class="reference internal" href="#data_classes.manage_dataset.print_dataset_graph"><code class="docutils literal notranslate"><span class="pre">print_dataset_graph()</span></code></a></li>
+<li><a class="reference internal" href="#data_classes.manage_dataset.print_shapes"><code class="docutils literal notranslate"><span class="pre">print_shapes()</span></code></a></li>
+<li><a class="reference internal" href="#data_classes.manage_dataset.visualize_class_distribution"><code class="docutils literal notranslate"><span class="pre">visualize_class_distribution()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-data_classes">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PolyU HRF DBII</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">data_classes package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/data_classes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="data-classes-package">
+<h1>data_classes package<a class="headerlink" href="#data-classes-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-data_classes.manage_dataset">
+<span id="data-classes-manage-dataset-module"></span><h2>data_classes.manage_dataset module<a class="headerlink" href="#module-data_classes.manage_dataset" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="data_classes.manage_dataset.PolyU_HRF_DBII">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_classes.manage_dataset.</span></span><span class="sig-name descname"><span class="pre">PolyU_HRF_DBII</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_classes/manage_dataset.html#PolyU_HRF_DBII"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data_classes.manage_dataset.PolyU_HRF_DBII" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
+<p>A Dataset for PolyU_HRF_DBII images.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_classes.manage_dataset.class_count">
+<span class="sig-prename descclassname"><span class="pre">data_classes.manage_dataset.</span></span><span class="sig-name descname"><span class="pre">class_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_classes/manage_dataset.html#class_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data_classes.manage_dataset.class_count" title="Link to this definition"></a></dt>
+<dd><p>Counts the number of instances of each class in a dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataset</strong> (<em>Dataset</em>) – The dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns a numpy array containing the counts of each class.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_classes.manage_dataset.load_datasets">
+<span class="sig-prename descclassname"><span class="pre">data_classes.manage_dataset.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_classes/manage_dataset.html#load_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data_classes.manage_dataset.load_datasets" title="Link to this definition"></a></dt>
+<dd><p>Loads the train, validation and test datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>Config</em>) – The configuration for loading the datasets.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns the train, validation and test datasets.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple (Dataset, Dataset, Dataset)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_classes.manage_dataset.print_dataset_graph">
+<span class="sig-prename descclassname"><span class="pre">data_classes.manage_dataset.</span></span><span class="sig-name descname"><span class="pre">print_dataset_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_classes/manage_dataset.html#print_dataset_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data_classes.manage_dataset.print_dataset_graph" title="Link to this definition"></a></dt>
+<dd><p>Prints the class distribution graph for the train, validation, and test datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_dataset</strong> (<em>Dataset</em>) – The training dataset.</p></li>
+<li><p><strong>val_dataset</strong> (<em>Dataset</em>) – The validation dataset.</p></li>
+<li><p><strong>test_dataset</strong> (<em>Dataset</em>) – The test dataset.</p></li>
+<li><p><strong>view</strong> (<em>bool</em>) – Whether to display the plots.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_classes.manage_dataset.print_shapes">
+<span class="sig-prename descclassname"><span class="pre">data_classes.manage_dataset.</span></span><span class="sig-name descname"><span class="pre">print_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_classes/manage_dataset.html#print_shapes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data_classes.manage_dataset.print_shapes" title="Link to this definition"></a></dt>
+<dd><p>Prints the shapes of the datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_dataset</strong> (<em>Dataset</em>) – The training dataset.</p></li>
+<li><p><strong>val_dataset</strong> (<em>Dataset</em>) – The validation dataset.</p></li>
+<li><p><strong>test_dataset</strong> (<em>Dataset</em>) – The test dataset.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_classes.manage_dataset.visualize_class_distribution">
+<span class="sig-prename descclassname"><span class="pre">data_classes.manage_dataset.</span></span><span class="sig-name descname"><span class="pre">visualize_class_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_classes/manage_dataset.html#visualize_class_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data_classes.manage_dataset.visualize_class_distribution" title="Link to this definition"></a></dt>
+<dd><p>Visualizes the class distribution in a dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>Dataset</em>) – The dataset to visualize.</p></li>
+<li><p><strong>dataset_name</strong> (<em>str</em>) – The name of the dataset.</p></li>
+<li><p><strong>view</strong> (<em>bool</em>) – Whether to display the plot.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-data_classes">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-data_classes" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Giuseppe Lorenzo Di Prima.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

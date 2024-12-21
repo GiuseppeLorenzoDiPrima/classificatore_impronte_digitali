@@ -1,3 +1,6 @@
+#-----  Command to run from terminal  -----#
+# python -u test.py -c config/base_config.yaml
+
 # Third-party imports
 import torch
 import torch.nn as nn
@@ -26,6 +29,7 @@ def print_metrics(list_of_metrics, saved_models):
     :param saved_models: The list of saved model names.
     :type saved_models: list of str
     """
+
     for idx, metrics in enumerate(list_of_metrics):
         print("\n" + saved_models[idx] + " model performance:\n")
         # Scrolls through the dictionary and prints performance metrics
@@ -152,6 +156,7 @@ def test_dl_model(model_name, config, device, test_dataset):
             config.ResNet_model.inplanes
         )
         model.to(device)
+    
     # CNN Model
     else:
         model = CNN(
@@ -222,7 +227,6 @@ if __name__ == '__main__':
     config = Dict(add_arguments())
     
     # ---------------------
-    
     # 2. Set device
     # ---------------------
     

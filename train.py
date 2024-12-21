@@ -1,8 +1,7 @@
 #-----  Command to run from terminal  -----#
 # python -u train.py -c config/base_config.yaml
+# Documentation command [execute in path "..\doc"]: .\make.bat html
 
-# Documentation command [execute in path "..\docs"]: .\make.bat html
-# Documentation command [execute in path ".."]: sphinx-apidoc -o doc .
 
 # Standard library imports
 import os
@@ -47,6 +46,7 @@ def train_one_epoch(model, dataloader, criterion, optimizer, scheduler, device):
     :return: Returns a dictionary containing the performance metrics of the training dataset.
     :rtype: dict
     """
+
     # Set the model to training mode
     model.train() 
     # Inizialize variables
@@ -104,6 +104,7 @@ def manage_best_model_and_metrics(model, evaluation_metric, val_metrics, best_va
     :return: Returns the best validation metrics and the best model.
     :rtype: tuple (dict, torch.nn.Module)
     """
+
     # Based on the evaluation metric you choose, evaluate whether the current one is higher or not
     if lower_is_better:
         is_best = val_metrics[evaluation_metric] < best_val_metric[evaluation_metric]
@@ -123,7 +124,7 @@ def manage_best_model_and_metrics(model, evaluation_metric, val_metrics, best_va
 # Train deep learning models
 def train_model(model, config, train_dl, val_dl, device, criterion):
     """
-    This function trains a model given a training dataset, a device, and a criterion.
+    This function trains a model given a training dataset, a device and a criterion.
 
     :param model: The model to be trained.
     :type model: torch.nn.Module
@@ -133,13 +134,14 @@ def train_model(model, config, train_dl, val_dl, device, criterion):
     :type train_dl: torch.utils.data.DataLoader
     :param val_dl: The DataLoader for the validation dataset.
     :type val_dl: torch.utils.data.DataLoader
-    :param device: The device on which to train the model (e.g., 'cpu', 'cuda').
+    :param device: The device on which to train the model (e.g. 'cpu' or 'cuda').
     :type device: str
     :param criterion: The criterion to use for calculating loss during training.
     :type criterion: torch.nn.modules.loss._Loss
-    :return: Returns the best validation metric, the best model, the list of training metrics, and the list of validation metrics.
+    :return: Returns the best validation metric, the best model, the list of training metrics and the list of validation metrics.
     :rtype: tuple (dict, torch.nn.Module, list, list)
     """
+
     # Initializing variables
     training_metrics_list = []
     validation_metrics_list = []
@@ -148,6 +150,7 @@ def train_model(model, config, train_dl, val_dl, device, criterion):
         string_model = "ResNet model -"
     else:
         string_model = "CNN model -"
+    
     # Select the optimization algorithm based on the configuration chosen in the config
     if config.deep_learning_training.optimizer.lower() == 'adam':
         optimizer = torch.optim.Adam(model.parameters(), lr=config.training.learning_rate)
@@ -155,12 +158,14 @@ def train_model(model, config, train_dl, val_dl, device, criterion):
         optimizer = torch.optim.SGD(model.parameters(), lr=config.training.learning_rate)
     else:
         optimizer = torch.optim.RMSprop(model.parameters(), lr=config.training.learning_rate)
+    
     # learning rate scheduler
     total_steps = len(train_dl) * config.deep_learning_training.epochs
     warmup_steps = int(total_steps * config.deep_learning_training.warmup_ratio)
     # Warmup for [warmup_ratio]% and linear decay
     scheduler_lambda = lambda step: (step / warmup_steps) if step < warmup_steps else max(0.0, (total_steps - step) / (total_steps - warmup_steps))
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=scheduler_lambda)
+    
     # Initialization of the dictionary that contains performance metrics
     best_val_metric = {'accuracy': float, 'precision': float, 'recall': float, 'f1': float}
     # Initializing the best performance metrics and the other variables
@@ -170,6 +175,7 @@ def train_model(model, config, train_dl, val_dl, device, criterion):
         best_val_metric[config.training.evaluation_metric.lower()] = float('-inf')
     best_model = None
     no_valid_epochs = 0
+    
     # Training cycle that iterates through all epochs
     for epoch in range(config.deep_learning_training.epochs):
         print("%s Epoch %d/%d" % (string_model, (epoch + 1), config.deep_learning_training.epochs))
@@ -193,6 +199,7 @@ def train_model(model, config, train_dl, val_dl, device, criterion):
             best_model, 
             config.training.best_metric_lower_is_better
         )
+        
         # Earling stopping
         # Check which metric was chosen for early stopping
         if config.training.early_stopping_metric.lower() == 'loss':
@@ -230,6 +237,7 @@ def evaluate_model(best_val_metric, best_model, test_set, criterion, device, typ
     :return: Returns the metrics and confusion matrix for the test dataset.
     :rtype: tuple (list, numpy.ndarray)
     """
+
     print("---------------------")
     print_best_val_metrics(type_model, best_val_metric)
     # Evaluate the performance of the test_dataset
@@ -259,6 +267,7 @@ def train_ml_model(model_name, config, device, train_dataset, val_dataset, test_
     :return: Returns the metrics for the test dataset.
     :rtype: dict
     """
+
     print("---------------------")
     
     # ---------------------
@@ -353,11 +362,11 @@ def train_dl_model(model_name, config, device, train_dataset, val_dataset, test_
     """
     This function trains a deep learning model and evaluates its performance.
 
-    :param model_name: The name of the model to be trained (e.g., 'ResNet', 'CNN').
+    :param model_name: The name of the model to be trained (e.g., 'ResNet' or 'CNN').
     :type model_name: str
     :param config: The configuration settings for training the model.
     :type config: object
-    :param device: The device on which to train the model (e.g., 'cpu', 'cuda').
+    :param device: The device on which to train the model (e.g., 'cpu' or 'cuda').
     :type device: str
     :param train_dataset: The dataset used for training the model.
     :type train_dataset: torch.utils.data.Dataset
@@ -392,14 +401,14 @@ def train_dl_model(model_name, config, device, train_dataset, val_dataset, test_
         sampler=sampler
     )
     
-    # Loading the train_dataset
+    # Loading the validation_dataset
     val_dl = torch.utils.data.DataLoader(
         val_dataset,
         batch_size=config.deep_learning_training.batch_size,
         shuffle=False # Without shuffling the data
     )
     
-    # Loading the train_dataset
+    # Loading the test_dataset
     test_dl = torch.utils.data.DataLoader(
         test_dataset,
         batch_size=config.deep_learning_training.batch_size,

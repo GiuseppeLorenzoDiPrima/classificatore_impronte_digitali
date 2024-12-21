@@ -6,6 +6,7 @@ class ResidualBlock(nn.Module):
     """
     A PyTorch implementation of a residual block.
     """
+
     def __init__(self, in_channels, out_channels, stride = 1, downsample = None):
         """
         A PyTorch implementation of a residual block.
@@ -19,11 +20,14 @@ class ResidualBlock(nn.Module):
         :param downsample: The downsample function for adjusting the size of the residual connection.
         :type downsample: nn.Module or None
         """
+
         super(ResidualBlock, self).__init__()
+
         # Conv2d -> Convolutional layer
         # BatchNorm2d -> Regularization function
         # ReLU -> Activation function
         # downsample -> Pooling layer
+
         self.conv1 = nn.Sequential(
                         nn.Conv2d(in_channels, out_channels, kernel_size = 3, stride = stride, padding = 1),
                         nn.BatchNorm2d(out_channels),
@@ -45,6 +49,7 @@ class ResidualBlock(nn.Module):
         :return: Returns the output of the block.
         :rtype: torch.Tensor
         """
+
         residual = x
         out = self.conv1(x)
         out = self.conv2(out)
@@ -59,6 +64,7 @@ class ResNet(nn.Module):
     """
         A PyTorch implementation of the ResNet model.
     """
+
     def __init__(self, block, layers, number_of_classes, stride_size, padding_size, kernel_size, channels_of_color, planes, in_features, inplanes):
         """
         A PyTorch implementation of the ResNet model.
@@ -84,13 +90,15 @@ class ResNet(nn.Module):
         :param inplanes: The number of input channels for the first convolutional layer.
         :type inplanes: int
         """
+
         super(ResNet, self).__init__()
-        # Set the number of classes according to the configuration you choose
+
         # Conv2d -> Convolutional layer
         # BatchNorm2d -> Regularization function
         # ReLU -> Activation function
         # MaxPool2d -> Max pooling layer
         # AvgPool2d -> Average pooling layer
+
         self.inplanes = inplanes
         self.conv1 = nn.Sequential(
                         nn.Conv2d(channels_of_color, self.inplanes, kernel_size = kernel_size[0], stride = stride_size[0], padding = padding_size[0]),
@@ -120,6 +128,7 @@ class ResNet(nn.Module):
         :return: Returns the layer.
         :rtype: nn.Sequential
         """
+
         downsample = None
         if stride != 1 or self.inplanes != planes:
             downsample = nn.Sequential(
@@ -143,6 +152,7 @@ class ResNet(nn.Module):
         :return: Returns the output of the network.
         :rtype: torch.Tensor
         """
+        
         x = self.conv1(x)
         x = self.maxpool(x)
         for index in range(len(self.layer)):

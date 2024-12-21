@@ -1,23 +1,25 @@
-## Machine Learning Project Chest X-Ray
+## Project for "Autenticazione biometrica per la sicurezza dei sistemi informatici"
+### PolyU HRF DBII Datasets
 
-This is a guide to assist in reading the “Chest X_Ray” project related to the machine learning exam for the Kore University of Enna.
+This is a guide to assist in reading the “PolyU HRF DBII” project related to the exam of "Autenticazione biometrica per la sicurezza dei sistemi informatici" for the "Kore" University of Enna.
 
 | | |
 | --- | --- |
-| **Description** | Machine learning project Chest X-Ray |
-| **Authors** | Barbera Antonino e Di Prima Giuseppe Lorenzo |
-| **Course** | [Machine Learning @ UniKore](https://unikore.it) |
+| **Description** | Project PolyU HRF DBII |
+| **Authors** | Di Prima Giuseppe Lorenzo |
+| **Course** | [Autenticazione biometrica per la sicurezza dei sistemi informatici @ UniKore](https://unikore.it/cdl-insegnamento/autenticazione-biometrica-per-la-sicurezza-dei-sistemi-informatici-ing-inf-05-9-cfu-ingegneria-dellintelligenza-artificiale-e-della-sicurezza-informatica-pds-2024-2025-ii-anno/) |
 | **License** | [MIT](https://opensource.org/licenses/MIT) |
 
 ---
 
 ### Table of Contents
 
-- [Machine Learning Project Chest X-Ray](#machine-learning-project-template)
+- [Project PolyU HRF DBII](#PolyU-HRF-DBII-Datasets)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Requirements](#requirements)
   - [Code structure](#code-structure)
+  - [Automatic classification](#automatic-classification)
   - [Use of base_config.yaml file](#Use-of-base_config.yaml-file)
   - [Documentation](#Documentation)
   - [License](#license)
@@ -26,29 +28,32 @@ This is a guide to assist in reading the “Chest X_Ray” project related to th
 
 ### Introduction
 
-The goal of the project is to correctly classify, through the use of a convolutional neural network and artificial neural network, images related to X-ray radiographs of the chests of children.
-The project presents two convolutional neural networks, respectively ResNet and AlexNet, and a Support Vector Machine model, whose performance will be subsequently compared.
+The objective of this project is to develop an automatic fingerprint classification system into 8 classes: Plain Arch, Tented Arch, Ulnar Loop, Radial Loop, Double Loop Whorl, Plain Whorl, Central Pocket Loop Whorl and Accidental Whorl. To achieve this goal, multiple proposals have been made, using advanced deep learning and machine learning techniques. For training the model, the HRF DBII dataset provided by the Hong Kong Polytechnic University was used.
 
-[Chest X-ray images](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia) (anterior-posterior) were selected from retrospective cohorts of pediatric patients of one to five years old from Guangzhou Women and Children’s Medical Center, Guangzhou.
+PolyU HRF DBII consists of a small high resolution fingerprint (HRF) dataset. The images of the same finger were collected in two sessions separated by about two weeks. Each image is named as “ID_S_X”, where “ID” represents the identity of the person, “S” represents the session of the captured image and “X” represents the image number of each session. DBII contains 1.480 images from 148 fingers.
 
-The project is divided into two main scripts:
-- `train.py` for training the model.
-- `test.py` for testing the model.
+To ensure that the performance during the testing phase was as objective as possible, after classifying the images into the 8 classes, they were divided by user, ensuring that only fingerprints from users not used during the training phase were used during testing.
 
-The dataset is managed by the `manage_dataset.py` class, while the three models are defined in the `resnet_model.py`, `alexnet_model.py` and `svm_model.py` class.
+In terms of networks, within deep learning, a residual convolutional neural network (ResNet) and a convolutional neural network were used, while in the field of machine learning, the well-known SVM algorithm was used. The performance of the networks may vary between training sessions due to random initialization.
+
+Before you can proceed with the classification of fingerprints, it is necessary to train the neural network. Two scripts are provided for this purpose:
+- `train.py` for training the models.
+- `test.py` for testing the models.
+
+The dataset is managed by the `manage_dataset.py` class, while the two custom models are defined in the `resnet_model.py` and `CNN_model.py`. A standard machine learning model, specifically the `SVM`, is also used.
 
 > [!IMPORTANT]  
 > To reproduce the project, you need to run the following commands to include the configuration file:
 >
 >\>>> python -u train.py -c config/base_config.yaml
 >
-> Replace "train.py" with "test.py" to evaluate performance on the test dataset after training the model
+> Replace "train.py" with "test.py" to evaluate performance on the test dataset after training the models
 
 The main idea is that, the project can be reproduced by running the following commands:
 
 ```bash
-git clone https://github.com/GiuseppeLorenzoDiPrima/Esame_Barbera_Di_Prima.git
-cd Esame_Barbera_Di_Prima
+git clone https://github.com/GiuseppeLorenzoDiPrima/classificatore_impronte_digitali.git
+cd classificatore_impronte_digitali
 bash prepare.sh
 python train.py
 python test.py
@@ -57,13 +62,19 @@ python test.py
 > [!CAUTION]
 >  You must have a version of git installed that is compatible with your operating system to perform the git clone operation.
 
----
+After training and testing the neural networks, you can proceed with the automatic classification of images. Within the repository, there is a folder named `Fingerprint_to_classify`. Simply move the images you want to classify into this folder and execute the command:
 
-The `prepare.sh` script is used to install the requirements for the project and to set up the environment (e.g. download the dataset)
+```bash
+python classify.py
+```
+---
+Upon completion, the classification results will be visible inside the `Fingerprint_classified` folder. 
 
 ### Requirements
 
 The project is based on **Python 3.12.3** - one of the latest versions of Python at the time of writing.
+
+The `prepare.sh` script is used to install the requirements for the project and to set up the environment (e.g. download the dataset)
 
 - The requirements are listed in the `requirements.txt` file and can be installed using `pip install -r requirements.txt`.
 
@@ -81,7 +92,7 @@ This project is based on the following libraries:
 - `shutil` for file and directory manipulation
 - `seaborn` for confusion matrix
 - `transformers` for embeddings
-- `logging` to hid warnings
+- `logging` to hide warnings
 - `joblib` to save and load models
 ---
 
@@ -126,9 +137,10 @@ main_repository/
 |
 ├── model_classes/
 |   ├── resnet_model.py
-|   ├── alexnet_model.py
-|   ├── svm_model.py
+|   ├── CNN_model.py
 |
+|
+├── classify.py
 |
 ├── LICENCE
 ├── prepare.sh
@@ -145,6 +157,7 @@ main_repository/
 - `docs/` contains project documentation.
 - `extract_representations/` contains classes to manage embeddings for the SVM model.
 - `model_classes/` contains the classes for the models design.
+- `classify.py` is the script for classification.
 - `LICENCE/` contains the license to use the project.
 - `prepare.sh` is a script for setting up the environment installing the requirements.
 - `README.md` is the file you are currently reading.
@@ -157,18 +170,24 @@ main_repository/
 > [!IMPORTANT]  
 > After executing the script train.py to the entire local running directory, additional folders will be generated: checkpoints, dataset and graph
 
-- `checkpoints/` this folder contains two files in .pt format that represent the saving of the weights of the best models found during training.
-- `dataset/` this folder contains the dataset already divided into train, val, and test. Based on the choice of classification (binary or ternary) each folder will be divided into the appropriate classes.
-- `graph/` this folder contains the graphs that originated from the manipulation of the dataset, the training, comparison, and testing phases .
+- `checkpoints/` this folder could contain two files in .pt format that represent the saving of the weights of the best models found during training. It also could contain .joblib and .pkl files used by SVM model. 
+- `dataset/` this folder contains the dataset already divided into train, val and test.
+- `graph/` this folder contains the graphs that originated from the manipulation of the dataset, the training, comparison and testing phases.
+
+### Automatic classification
+
+> [!IMPORTANT]  
+> The project was provided with two empty folders, respectively named 'Fingerprint_to_classify' and 'Fingerprint_classified,' which are used for the automatic classification of images. <br>Specifically:
+- `Fingerprint_to_classify/` represents the folder where you should place the fingerprint images you want to classify using the trained neural network.
+- `Fingerprint_classified/` represents the folder where the images are moved once they have been classified. At the end of the classification process, a subfolder for each necessary class is created, ensuring that the corresponding image is restored in that class.
 
 > [!CAUTION]
->  In reference to what has been said regarding the possibility of being able to proceed with both binary and ternary classifications, it is advisable to pay close attention to the testing phase. It is possible to test the obtained model only on a dataset of the same type. A trained binary model can therefore be tested on the binary dataset while the same cannot be said on a possible ternary test dataset and vice versa.
+>  If the folders are accidentally removed, they will be automatically recreated during the next classification attempt. You will need to reinsert the images you want to classify into the 'Fingerprint_to_classify' folder.
 ---
 
 ### Use of base_config.yaml file
 Through the use of the base_config.yaml file, it is possible to modify the configuration parameters related to the training of the model. Here are just a few of the most common examples:
 
-- `classification.type` you can choose between a binary ([NORMAL] [PNEUMONIA]) or ternary ([NORMAL] [BACTERIA] [VIRUS]) classification.
 - `create_dataset_graph` you can choose to create [TRUE] or not [FALSE] dataset graph.
 - `view_dataset_graph` you can choose to view [TRUE] or not [FALSE] dataset graph during execution.
 - `model_to_train` you can choose the model you want to train.

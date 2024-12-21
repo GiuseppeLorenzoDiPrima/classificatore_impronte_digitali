@@ -1,0 +1,13 @@
+Progetto esame
+==============
+
+.. toctree::
+   :maxdepth: 4
+
+   classify
+   data_classes
+   extract_representations
+   model_classes
+   test
+   train
+   utils
