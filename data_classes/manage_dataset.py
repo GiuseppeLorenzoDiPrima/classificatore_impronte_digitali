@@ -5,7 +5,7 @@ from torch.utils.data import Dataset
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Local application/library specific imports
+# Local application/library specific import
 from utils import save_graph
 
 
@@ -46,16 +46,16 @@ class PolyU_HRF_DBII(Dataset):
         """
         A Dataset for PolyU_HRF_DBII images.
 
-        :param type: The type of the dataset (e.g., 'train', 'val', 'test').
+        :param type: The type of the dataset (e.g. 'train', 'val', 'test').
         :type type: str
         :param root: The root directory of the dataset.
         :type root: str
         """
 
-        # Initializing the variable
+        # Initialize the variable
         path = ""
 
-        # Initializing the path
+        # Initialize the path
         if type == 'train':
             path += str(root.data_dir) + "train//"
         elif type == 'val':
@@ -71,7 +71,7 @@ class PolyU_HRF_DBII(Dataset):
         else:
             self.data = ImageFolder(path, transform=transformation['testing'])
         
-        # Sets variables
+        # Set variables
         self.classes = self.data.classes
         self.targets = self.data.targets
         self.path = path
@@ -96,7 +96,7 @@ class PolyU_HRF_DBII(Dataset):
 # Count how many items are contained for each class in the dataset
 def class_count(dataset):
     """
-    Counts the number of instances of each class in a dataset.
+    Count the number of instances of each class in a dataset.
 
     :param dataset: The dataset.
     :type dataset: Dataset
@@ -111,13 +111,13 @@ def class_count(dataset):
     # Increase the counter for the corresponding class by one
     for value in labels:
         elemets[value] += 1
-    # Returns a vector containing the number of elements for each class
+    # Return a vector containing the number of elements for each class
     return elemets
     
-# Print the size of the dataset
+# Print the size of the dataset for each class
 def print_shapes(train_dataset, val_dataset, test_dataset):
     """
-    Prints the shapes of the datasets.
+    Print the shapes of the datasets.
 
     :param train_dataset: The training dataset.
     :type train_dataset: Dataset
@@ -132,10 +132,11 @@ def print_shapes(train_dataset, val_dataset, test_dataset):
     val_class_counts = class_count(val_dataset)
     test_class_counts = class_count(test_dataset)
     
-    # Print that you are printing datasets shapes
     print("Datasets shapes:\n")
 
-    # Print each dataset size splitted by classes
+    # Print each dataset class size
+
+    # Train set
     print(f"Train size: {len(train_dataset)}")
     print(f"\t- Train accidental whorl: {int(train_class_counts[0])}")
     print(f"\t- Train central pocket loop whorl: {int(train_class_counts[1])}")
@@ -146,6 +147,7 @@ def print_shapes(train_dataset, val_dataset, test_dataset):
     print(f"\t- Train tended arch: {int(train_class_counts[6])}")
     print(f"\t- Train ulnar loop: {int(train_class_counts[7])}")
 
+    # Validation set
     print(f"Validation size: {len(val_dataset)}")
     print(f"\t- Validation accidental whorl: {int(val_class_counts[0])}")
     print(f"\t- Validation central pocket loop whorl: {int(val_class_counts[1])}")
@@ -156,6 +158,7 @@ def print_shapes(train_dataset, val_dataset, test_dataset):
     print(f"\t- Validation tended arch: {int(val_class_counts[6])}")
     print(f"\t- Validation ulnar loop: {int(val_class_counts[7])}")
 
+    # Test set
     print(f"Test size: {len(test_dataset)}")
     print(f"\t- Test accidental whorl: {int(test_class_counts[0])}")
     print(f"\t- Test central pocket loop whorl: {int(test_class_counts[1])}")
@@ -166,10 +169,10 @@ def print_shapes(train_dataset, val_dataset, test_dataset):
     print(f"\t- Test tended arch: {int(test_class_counts[6])}")
     print(f"\t- Test ulnar loop: {int(test_class_counts[7])}")
 
-# Print a graph to illustrate the distribution of data across train, validation, and test datasets
+# Print a graph to illustrate the distribution of data across train, validation and test datasets
 def visualize_class_distribution(dataset, dataset_name, view):
     """
-    Visualizes the class distribution in a dataset.
+    Visualize the class distribution in a dataset.
 
     :param dataset: The dataset to visualize.
     :type dataset: Dataset
@@ -181,7 +184,7 @@ def visualize_class_distribution(dataset, dataset_name, view):
 
     # Initialize a vector to zero
     class_counts = np.zeros(len(dataset.classes))
-    # Fills the vector with the number of elements for each class
+    # Fill the vector with the number of elements for each class
     class_counts = class_count(dataset)
 
     # Print a bar graph according to the colors shown in the order
@@ -196,13 +199,13 @@ def visualize_class_distribution(dataset, dataset_name, view):
     # If the user expressed the preference in the base_config file, it shows the result
     if view:
         plt.show()
-    # Closes the graph to avoid overlap
+    # Close the graph to avoid overlap
     plt.close()
     
 # Invoke the visualize_class_distribution once for each dataset [Train, Validation and Test]
 def print_dataset_graph(train_dataset, val_dataset, test_dataset, view):
     """
-    Prints the class distribution graph for the train, validation, and test datasets.
+    Print the class distribution graph for the train, validation, and test datasets.
 
     :param train_dataset: The training dataset.
     :type train_dataset: Dataset
@@ -220,10 +223,10 @@ def print_dataset_graph(train_dataset, val_dataset, test_dataset, view):
     visualize_class_distribution(val_dataset, "Validation", view)
     visualize_class_distribution(test_dataset, "Test", view)
 
-# Creates dataset objects
+# Create dataset objects
 def load_datasets(config):
     """
-    Loads the train, validation and test datasets.
+    Load the train, validation and test datasets.
 
     :param config: The configuration for loading the datasets.
     :type config: Config

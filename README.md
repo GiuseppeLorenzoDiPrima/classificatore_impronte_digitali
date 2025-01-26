@@ -28,7 +28,7 @@ This is a guide to assist in reading the “PolyU HRF DBII” project related to
 
 ### Introduction
 
-The objective of this project is to develop an automatic fingerprint classification system into 8 classes: Plain Arch, Tented Arch, Ulnar Loop, Radial Loop, Double Loop Whorl, Plain Whorl, Central Pocket Loop Whorl and Accidental Whorl. To achieve this goal, a proposal using advanced deep learning techniques has been made. For training the model, the HRF DBII dataset provided by the Hong Kong Polytechnic University was used.
+The objective of this project is to develop an automatic fingerprint classification system into 8 classes: Plain Arch, Tented Arch, Ulnar Loop, Radial Loop, Double Loop Whorl, Plain Whorl, Central Pocket Loop Whorl and Accidental Whorl. To achieve this goal, a proposal using an advanced deep learning techniques has been made. To train the model, the HRF DBII dataset provided by the Hong Kong Polytechnic University was used.
 
 PolyU HRF DBII consists of a small high resolution fingerprint (HRF) dataset. The images of the same finger were collected in two sessions separated by about two weeks. Each image is named as “ID_S_X”, where “ID” represents the identity of the person, “S” represents the session of the captured image and “X” represents the image number of each session. DBII contains 1.480 images from 148 fingers.
 
@@ -65,7 +65,7 @@ python test.py
 After training and testing the neural network, you can proceed with the automatic classification of images. Within the repository, there is a folder named `Fingerprint_to_classify`. Simply move the images you want to classify into this folder and execute the command:
 
 ```bash
-python classify.py
+python classify.py -c config/base_config.yaml
 ```
 ---
 Upon completion, the classification results will be visible inside the `Fingerprint_classified` folder. 
@@ -129,7 +129,6 @@ main_repository/
 ├── model_classes/
 |   ├── resnet_model.py
 |
-|
 ├── classify.py
 |
 ├── LICENCE
@@ -143,7 +142,7 @@ main_repository/
 ```
 
 - `config/` contains the configuration parameters.
-- `data_classes/` contains the classe for managing the dataset.
+- `data_classes/` contains the class for managing the dataset.
 - `docs/` contains project documentation.
 - `model_classes/` contains the classes for the model design.
 - `classify.py` is the script for classification.
@@ -167,11 +166,11 @@ main_repository/
 
 > [!IMPORTANT]  
 > The project was provided with two empty folders, respectively named 'Fingerprint_to_classify' and 'Fingerprint_classified,' which are used for the automatic classification of images. <br>Specifically:
-- `Fingerprint_to_classify/` represents the folder where you should place the fingerprint images you want to classify using the trained neural network.
+- `Fingerprint_to_classify/` represents the folder where you should place the fingerprint images you want to classify using the trained neural residual network.
 - `Fingerprint_classified/` represents the folder where the images are moved once they have been classified. At the end of the classification process, a subfolder for each necessary class is created, ensuring that the corresponding image is restored in that class.
 
 > [!CAUTION]
->  If the folders are accidentally removed, they will be automatically recreated during the next classification attempt. You will need to reinsert the images you want to classify into the 'Fingerprint_to_classify' folder.
+>  If the "Fingerprint_to_classify" folder is accidentally removed, it will be automatically recreated during the next classification attempt. You will need to reinsert the images you want to classify into the new 'Fingerprint_to_classify' folder.
 ---
 
 ### Use of base_config.yaml file
@@ -181,7 +180,7 @@ Through the use of the base_config.yaml file, it is possible to modify the confi
 - `view_dataset_graph` you can choose to view [TRUE] or not [FALSE] dataset graph during execution.
 - `create_model_graph` you can choose to create [TRUE] or not [FALSE] model graph.
 - `view_model_graph` you can choose to view [TRUE] or not [FALSE] model graph.
-- `metric_plotted_during_traininig` you can select the only performance metrics you prefer to view.
+- `metric_plotted_during_traininig` you can select the only performance metrics you prefer to plot.
 - `epochs` you can choose number of epochs based on your device computing capacity.
 - `early_stopping_metric` you can choose the metric against which you want to check for performance improvement according to early stopping.
 - `earling_stopping_max_no_valid_epochs` you can choose the max value of epochs that do not produce performance improvement.

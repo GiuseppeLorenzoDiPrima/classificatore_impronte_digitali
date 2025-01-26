@@ -1,9 +1,9 @@
 #-----  Command to run from terminal  -----#
-# python -u train.py -c config/base_config.yaml
+# Train command: python -u train.py -c config/base_config.yaml
 # Documentation command [execute in path "..\doc"]: .\make.bat html
 
 
-# Standard library imports
+# Standard library import
 import os
 
 # Third-party imports
@@ -24,7 +24,7 @@ from utils import *
 # Train a training epoch for ResNet model
 def train_one_epoch(model, dataloader, criterion, optimizer, scheduler, device):
     """
-    Trains a model for one epoch.
+    Train a model for one epoch.
 
     :param model: The model to be trained.
     :type model: torch.nn.Module
@@ -36,7 +36,7 @@ def train_one_epoch(model, dataloader, criterion, optimizer, scheduler, device):
     :type optimizer: torch.optim.Optimizer
     :param scheduler: The learning rate scheduler.
     :type scheduler: torch.optim.lr_scheduler._LRScheduler
-    :param device: The device on which to train the model (e.g., 'cpu', 'cuda').
+    :param device: The device on which to train the model (e.g. 'cpu', 'cuda').
     :type device: str
     :return: Returns a dictionary containing the performance metrics of the training dataset.
     :rtype: dict
@@ -48,12 +48,13 @@ def train_one_epoch(model, dataloader, criterion, optimizer, scheduler, device):
     running_loss = 0.0
     predictions = []
     references = []
+    
     # Batch execution
-    for i, batch in enumerate(tqdm(dataloader, desc='Training')):
+    for _, batch in enumerate(tqdm(dataloader, desc='Training')):
         # Upload images and labels
         images = batch['image'].to(device)
         labels = batch['label'].to(device)
-        # Erasing old gradient values
+        # Erase old gradient values
         optimizer.zero_grad()
         # Calculate output
         outputs = model(images)
@@ -63,7 +64,7 @@ def train_one_epoch(model, dataloader, criterion, optimizer, scheduler, device):
         loss.backward()
         # Optimization
         optimizer.step()
-        # Scheduler learning rate
+        # Learning rate scheduler
         scheduler.step()
         # Add the current loss to the total
         running_loss += loss.item()
@@ -72,17 +73,19 @@ def train_one_epoch(model, dataloader, criterion, optimizer, scheduler, device):
         predictions.extend(pred.cpu().numpy())
         # Compute refereces
         references.extend(labels.cpu().numpy())
+
     # Compute performance metrics based on differences between predictiones and references 
     train_metrics = compute_metrics(predictions, references)
     # Add loss to performance metrics
     train_metrics['loss'] = running_loss / len(dataloader)
+
     # Return performance metrics
     return train_metrics
 
 # Manage best model and best validation metrics
 def manage_best_model_and_metrics(model, evaluation_metric, val_metrics, best_val_metric, best_model, lower_is_better):
     """
-    Manages the best model and its metrics.
+    Manage the best model and its metrics.
 
     :param model: The current model.
     :type model: torch.nn.Module
@@ -96,7 +99,7 @@ def manage_best_model_and_metrics(model, evaluation_metric, val_metrics, best_va
     :type best_model: torch.nn.Module
     :param lower_is_better: Whether a lower metric value is better.
     :type lower_is_better: bool
-    :return: Returns the best validation metrics and the best model.
+    :return: Return the best validation metrics and the best model.
     :rtype: tuple (dict, torch.nn.Module)
     """
 
@@ -111,7 +114,7 @@ def manage_best_model_and_metrics(model, evaluation_metric, val_metrics, best_va
         best_model = model
     return best_val_metric, best_model
 
-# Train deep learning models
+# Train ResNet model
 def train_model(model, config, train_dl, val_dl, device, criterion):
     """
     This function trains a model given a training dataset, a device and a criterion.
@@ -144,7 +147,8 @@ def train_model(model, config, train_dl, val_dl, device, criterion):
     else:
         optimizer = torch.optim.RMSprop(model.parameters(), lr=config.training.learning_rate)
     
-    # learning rate scheduler
+    # --- learning rate scheduler --- #
+
     total_steps = len(train_dl) * config.deep_learning_training.epochs
     warmup_steps = int(total_steps * config.deep_learning_training.warmup_ratio)
     # Warmup for [warmup_ratio]% and linear decay
@@ -175,7 +179,7 @@ def train_model(model, config, train_dl, val_dl, device, criterion):
         # Print results
         print(f"Train loss: {train_metrics['loss']:.4f} - Train accuracy: {train_metrics['accuracy']:.4f}")
         print(f"Val loss: {val_metrics['loss']:.4f} - Val accuracy: {val_metrics['accuracy']:.4f}")
-        # Calculates the new best model and new best performance as a result of the last training
+        # Calculate the new best model and new best performance as a result of the last training
         best_val_metric, best_model = manage_best_model_and_metrics(
             model, 
             config.training.evaluation_metric, 
@@ -185,7 +189,8 @@ def train_model(model, config, train_dl, val_dl, device, criterion):
             config.training.best_metric_lower_is_better
         )
         
-        # Earling stopping
+        # --- Earling stopping --- #
+
         # Check which metric was chosen for early stopping
         if config.training.early_stopping_metric.lower() == 'loss':
             # If performance is not improved, the early stopping counter increases by one
@@ -199,7 +204,7 @@ def train_model(model, config, train_dl, val_dl, device, criterion):
         if no_valid_epochs == config.training.earling_stopping_max_no_valid_epochs:
             print(f"The training process has ended because the maximum value of early stopping, which is {config.training.earling_stopping_max_no_valid_epochs:}, has been reached.")
             break
-    # Returns the best metrics, best model, and performance history for training and validation
+    # Return the best metrics, best model, and performance history for training and validation
     return best_val_metric, best_model, training_metrics_list, validation_metrics_list
 
 # Evaluate the performance of the model on the incoming passed dataset
@@ -215,9 +220,9 @@ def evaluate_model(best_val_metric, best_model, test_set, criterion, device):
     :type test_set: torch.utils.data.DataLoader
     :param criterion: The criterion to use for calculating loss during evaluation.
     :type criterion: torch.nn.modules.loss._Loss
-    :param device: The device on which to evaluate the model (e.g., 'cpu', 'cuda').
+    :param device: The device on which to evaluate the model (e.g. 'cpu', 'cuda').
     :type device: str
-    :return: Returns the metrics and confusion matrix for the test dataset.
+    :return: Return the metrics and confusion matrix for the test dataset.
     :rtype: tuple (list, numpy.ndarray)
     """
 
@@ -225,19 +230,19 @@ def evaluate_model(best_val_metric, best_model, test_set, criterion, device):
     print_best_val_metrics(best_val_metric)
     # Evaluate the performance of the test_dataset
     test_metrics, conf_matrix = evaluate(best_model, test_set, criterion, device)
-    # Compute performance metrics
+    # Compute and print performance metrics
     print_evaluation(test_metrics)
-    # Return performance metrics and confusion matrix
+    # Return confusion matrix
     return conf_matrix
   
-# Train the deep learning model
+# Train the ResNet model
 def setup_train_evaluate(config, device, train_dataset, val_dataset, test_dataset):
     """
-    This function trains a deep learning model and evaluates its performance.
+    This function trains a ResNet model and evaluates its performance.
 
     :param config: The configuration settings for training the model.
     :type config: object
-    :param device: The device on which to train the model (e.g., 'cpu' or 'cuda').
+    :param device: The device on which to train the model (e.g. 'cpu' or 'cuda').
     :type device: str
     :param train_dataset: The dataset used for training the model.
     :type train_dataset: torch.utils.data.Dataset
@@ -371,7 +376,7 @@ if __name__ == '__main__':
     # 2. Device configuration
     # ---------------------
     
-    # Selecting the device to run with: CUDA -> GPU; CPU -> CPU
+    # Select the device to run with: CUDA -> GPU; CPU -> CPU
     if config.training.device.lower() == 'cuda' and torch.cuda.is_available():
         device = torch.device('cuda')
     else:

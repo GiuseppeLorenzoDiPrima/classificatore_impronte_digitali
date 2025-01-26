@@ -1,5 +1,5 @@
 #-----  Command to run from terminal  -----#
-# python -u classify.py -c config/base_config.yaml
+# Classify command: python -u classify.py -c config/base_config.yaml
 
 # Third-party imports
 import torch
@@ -9,7 +9,7 @@ import os
 from torchvision import transforms
 from torch.utils.data import Dataset
 
-# Local application/library specific imports
+# Local application/library specific import
 from model_classes.resnet_model import ResNet, ResidualBlock
 
 # Configuration and utility imports
@@ -26,7 +26,7 @@ transform = transforms.Compose([
 ])
 
 
-# Custom class to create PolyU_HRF_DBII dataset
+# Custom class to create PolyU_HRF_DBII dataset without labels
 class PolyU_HRF_DBII(Dataset):
     """
     A Dataset for PolyU_HRF_DBII images.
@@ -42,19 +42,26 @@ class PolyU_HRF_DBII(Dataset):
         :type transform: torchvision.transform
         """
 
-        self.image_folder = image_folder # Set folder with images to classify
-        self.transform = transform # Set transormation
+        # Set folder with images to classify
+        self.image_folder = image_folder
+        # Set transormation
+        self.transform = transform
+        # Iniziaize variables
         self.classes = None
         self.targets = None
-        self.path = [os.path.join(image_folder, img) for img in os.listdir(image_folder) if img.endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff'))] # Select only image
+        # Select only image files
+        self.path = [os.path.join(image_folder, img) for img in os.listdir(image_folder) if img.endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff'))]
 
     def __len__(self):
         return len(self.path)
 
     def __getitem__(self, idx):
-        img_path = self.path[idx] # Compute image path
-        image = Image.open(img_path).convert('RGB') # Load image
-        if self.transform: # Apply tranformation
+        # Compute image path
+        img_path = self.path[idx]
+        # Load image
+        image = Image.open(img_path).convert('RGB')
+        # Apply tranformation
+        if self.transform: 
             image = self.transform(image)
         item = {
                 'image' : image,
@@ -110,7 +117,7 @@ def classify(config, device, dataset):
     # 3. Load model weights
     # ---------------------
     
-    # Loads the saved model weights to the specified folder during training
+    # Load the saved model weights to the specified folder during training
     print("Loading ResNet model...")
     model.load_state_dict(torch.load(f"{config.training.checkpoint_dir}/ResNet_best_model.pt"))
     print("-> ResNet model loaded.")
@@ -174,11 +181,12 @@ if __name__ == '__main__':
     # 2. Set device
     # ---------------------
     
-    # Selecting the device to run with: CUDA -> GPU; CPU -> CPU
+    # Select the device to run with: CUDA -> GPU; CPU -> CPU
     if config.training.device.lower() == 'cuda' and torch.cuda.is_available():
         device = torch.device('cuda')
     else:
         device = torch.device('cpu')
+    
     # Print selected device
     print("\nDevice: " + torch.cuda.get_device_name()) 
     print("---------------------")
@@ -189,6 +197,7 @@ if __name__ == '__main__':
     
     # Set/create folder for classification
     path = os.getcwd()
+    
     if not os.path.exists(os.path.join(path + "/", config.classification.image_folder)):
         os.makedirs(os.path.join(path + "/", config.classification.image_folder))
         raise Exception("Error no \"Fingerprint_to_classify\" directory found. It has been created right now. Please insert there image you want to classify.")

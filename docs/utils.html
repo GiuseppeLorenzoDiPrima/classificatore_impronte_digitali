@@ -97,7 +97,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.compute_metrics">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">compute_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">references</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#compute_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.compute_metrics" title="Link to this definition"></a></dt>
-<dd><p>Computes accuracy, precision, recall, and F1 score.</p>
+<dd><p>Compute accuracy, precision, recall and F1 score.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -106,7 +106,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary containing the accuracy, precision, recall, and F1 score.</p>
+<dd class="field-even"><p>A dictionary containing the accuracy, precision, recall and F1 score.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Dictionary</p>
@@ -117,18 +117,18 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.evaluate">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataloader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.evaluate" title="Link to this definition"></a></dt>
-<dd><p>Evaluates a model on a given dataset.</p>
+<dd><p>Evaluate a model on a given dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>torch.nn.Module</em>) – The model to be evaluated.</p></li>
 <li><p><strong>dataloader</strong> (<em>torch.utils.data.DataLoader</em>) – The DataLoader for the dataset.</p></li>
 <li><p><strong>criterion</strong> (<em>torch.nn.modules.loss._Loss</em>) – The criterion to use for calculating loss during evaluation.</p></li>
-<li><p><strong>device</strong> (<em>String</em>) – The device on which to evaluate the model (e.g., ‘cpu’, ‘cuda’).</p></li>
+<li><p><strong>device</strong> (<em>String</em>) – The device on which to evaluate the model (e.g. ‘cpu’, ‘cuda’).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Returns the evaluation metrics and confusion matrix.</p>
+<dd class="field-even"><p>Return the evaluation metrics and confusion matrix.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple (dict, numpy.ndarray)</p>
@@ -139,7 +139,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.print_best_val_metrics">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_best_val_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">best_val_metric</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_best_val_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_best_val_metrics" title="Link to this definition"></a></dt>
-<dd><p>Prints the best model performance on the validation dataset.</p>
+<dd><p>Print the best model performance on the validation dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>best_val_metric</strong> (<em>Dictionary</em>) – The best validation metrics.</p>
@@ -150,7 +150,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.print_confusion_matrix">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_confusion_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_confusion_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_confusion_matrix" title="Link to this definition"></a></dt>
-<dd><p>Prints a confusion matrix for the model.</p>
+<dd><p>Print a confusion matrix for the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>conf_matrix</strong> (<em>Numpy.ndarray</em>) – The confusion matrix to print.</p>
@@ -161,7 +161,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.print_confusion_matrix_graph">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_confusion_matrix_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_confusion_matrix_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_confusion_matrix_graph" title="Link to this definition"></a></dt>
-<dd><p>Prints a confusion matrix graph for a model.</p>
+<dd><p>Print a confusion matrix graph for a model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -176,16 +176,10 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.print_evaluation">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_evaluation" title="Link to this definition"></a></dt>
-<dd><p>Prints the evaluation metrics and returns them as a list.</p>
+<dd><p>Print the evaluation metrics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>test_metrics</strong> (<em>Dictionary</em>) – The test metrics.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The test metrics as a list.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List</p>
 </dd>
 </dl>
 </dd></dl>
@@ -193,7 +187,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.print_metrics_graph">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_metrics_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_metrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_metrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_plotted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_metrics_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_metrics_graph" title="Link to this definition"></a></dt>
-<dd><p>Prints the graph of a given metric for the training and validation datasets.</p>
+<dd><p>Print the graph of a given metric for the training and validation datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -209,11 +203,11 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.print_test_metrics_graph">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_test_metrics_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_plotted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_test_metrics_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_test_metrics_graph" title="Link to this definition"></a></dt>
-<dd><p>Prints the graph of a given metric for the testing datasets.</p>
+<dd><p>Print the graph of a given metric for the testing datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>metrics_list</strong> (<em>List</em>) – The metrics.</p></li>
+<li><p><strong>metrics</strong> (<em>List</em>) – The metrics.</p></li>
 <li><p><strong>metric_plotted</strong> (<em>String</em>) – The metric to be plotted.</p></li>
 <li><p><strong>view</strong> (<em>bool</em>) – Whether to display the plot.</p></li>
 </ul>
@@ -224,12 +218,12 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.save_graph">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">save_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#save_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.save_graph" title="Link to this definition"></a></dt>
-<dd><p>Saves a graph to a file.</p>
+<dd><p>Save a graph to a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>String</em>) – The name of the file to save the graph to.</p></li>
-<li><p><strong>type_of_graph</strong> (<em>String</em>) – The type of the graph (e.g. ‘Dataset’, ‘ResNet model’, ‘Testing result’).</p></li>
+<li><p><strong>directory</strong> (<em>String</em>) – Directory where to save the graph (e.g. ‘Dataset’, ‘ResNet model’, ‘Testing result’).</p></li>
 </ul>
 </dd>
 </dl>

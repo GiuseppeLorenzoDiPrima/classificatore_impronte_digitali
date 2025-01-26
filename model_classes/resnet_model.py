@@ -1,4 +1,4 @@
-# Third-party imports
+# Third-party import
 import torch.nn as nn
 
 # Class to define the ResidualBlock by inheriting nn.Module
@@ -42,7 +42,7 @@ class ResidualBlock(nn.Module):
     # Foward step
     def forward(self, x):
         """
-        Defines the forward pass of the residual block.
+        Define the forward pass of the residual block.
 
         :param x: The input to the block.
         :type x: torch.Tensor
@@ -62,7 +62,7 @@ class ResidualBlock(nn.Module):
 # Class to define the ResNet by inheriting nn.Module
 class ResNet(nn.Module):
     """
-        A PyTorch implementation of the ResNet model.
+    A PyTorch implementation of the ResNet model.
     """
 
     def __init__(self, block, layers, number_of_classes, stride_size, padding_size, kernel_size, channels_of_color, planes, in_features, inplanes):
@@ -115,7 +115,7 @@ class ResNet(nn.Module):
     # Create new layer
     def _make_layer(self, block, planes, blocks, stride):
         """
-        Makes a layer for the ResNet model.
+        Make a layer for the ResNet model.
 
         :param block: The type of block to use in the layer.
         :type block: nn.Module
@@ -145,7 +145,7 @@ class ResNet(nn.Module):
     # Foward step
     def forward(self, x):
         """
-        Defines the forward pass of the ResNet.
+        Define the forward pass of the ResNet.
 
         :param x: The input to the network.
         :type x: torch.Tensor

@@ -78,7 +78,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
-<span class="c1"># Standard library imports</span>
+<span class="c1"># Standard library import</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 
@@ -87,13 +87,13 @@
 <a class="viewcode-back" href="../utils.html#utils.compute_metrics">[docs]</a>
 <span class="k">def</span> <span class="nf">compute_metrics</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">references</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes accuracy, precision, recall, and F1 score.</span>
+<span class="sd">    Compute accuracy, precision, recall and F1 score.</span>
 
 <span class="sd">    :param predictions: The predicted labels.</span>
 <span class="sd">    :type predictions: List</span>
 <span class="sd">    :param references: The true labels.</span>
 <span class="sd">    :type references: List</span>
-<span class="sd">    :return: A dictionary containing the accuracy, precision, recall, and F1 score.</span>
+<span class="sd">    :return: A dictionary containing the accuracy, precision, recall and F1 score.</span>
 <span class="sd">    :rtype: Dictionary</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -117,7 +117,7 @@
 <a class="viewcode-back" href="../utils.html#utils.evaluate">[docs]</a>
 <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dataloader</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Evaluates a model on a given dataset.</span>
+<span class="sd">    Evaluate a model on a given dataset.</span>
 
 <span class="sd">    :param model: The model to be evaluated.</span>
 <span class="sd">    :type model: torch.nn.Module</span>
@@ -125,9 +125,9 @@
 <span class="sd">    :type dataloader: torch.utils.data.DataLoader</span>
 <span class="sd">    :param criterion: The criterion to use for calculating loss during evaluation.</span>
 <span class="sd">    :type criterion: torch.nn.modules.loss._Loss</span>
-<span class="sd">    :param device: The device on which to evaluate the model (e.g., &#39;cpu&#39;, &#39;cuda&#39;).</span>
+<span class="sd">    :param device: The device on which to evaluate the model (e.g. &#39;cpu&#39;, &#39;cuda&#39;).</span>
 <span class="sd">    :type device: String</span>
-<span class="sd">    :return: Returns the evaluation metrics and confusion matrix.</span>
+<span class="sd">    :return: Return the evaluation metrics and confusion matrix.</span>
 <span class="sd">    :rtype: tuple (dict, numpy.ndarray)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -163,6 +163,7 @@
     <span class="n">val_metrics</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">running_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataloader</span><span class="p">)</span>
     <span class="c1"># Calculate the confusion matrix</span>
     <span class="n">conf_matrix</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">references</span><span class="p">)</span>
+
     <span class="c1"># Return metrics and confusion matrix</span>
     <span class="k">return</span> <span class="n">val_metrics</span><span class="p">,</span> <span class="n">conf_matrix</span></div>
 
@@ -172,7 +173,7 @@
 <a class="viewcode-back" href="../utils.html#utils.print_metrics_graph">[docs]</a>
 <span class="k">def</span> <span class="nf">print_metrics_graph</span><span class="p">(</span><span class="n">training_metrics</span><span class="p">,</span> <span class="n">validation_metrics</span><span class="p">,</span> <span class="n">metric_plotted</span><span class="p">,</span> <span class="n">view</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prints the graph of a given metric for the training and validation datasets.</span>
+<span class="sd">    Print the graph of a given metric for the training and validation datasets.</span>
 
 <span class="sd">    :param training_metrics: The training metrics.</span>
 <span class="sd">    :type training_metrics: List</span>
@@ -192,9 +193,13 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">metrics</span><span class="p">[</span><span class="n">element</span><span class="p">]</span> <span class="k">for</span> <span class="n">metrics</span> <span class="ow">in</span> <span class="n">validation_metrics</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Validation&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Graph of &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; per epoch for ResNet model:&quot;</span><span class="p">)</span>
-        <span class="c1"># Improves graph visibility</span>
+
+        <span class="c1"># Improve graph visibility</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+        <span class="c1"># Save the graph</span>
         <span class="n">save_graph</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;Graph of &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="p">)),</span> <span class="s2">&quot;ResNet model&quot;</span><span class="p">)</span>
+
         <span class="c1"># Check if your configuration likes a print or not</span>
         <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -207,10 +212,10 @@
 <a class="viewcode-back" href="../utils.html#utils.print_test_metrics_graph">[docs]</a>
 <span class="k">def</span> <span class="nf">print_test_metrics_graph</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">metric_plotted</span><span class="p">,</span> <span class="n">view</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prints the graph of a given metric for the testing datasets.</span>
+<span class="sd">    Print the graph of a given metric for the testing datasets.</span>
 
-<span class="sd">    :param metrics_list: The metrics.</span>
-<span class="sd">    :type metrics_list: List</span>
+<span class="sd">    :param metrics: The metrics.</span>
+<span class="sd">    :type metrics: List</span>
 <span class="sd">    :param metric_plotted: The metric to be plotted.</span>
 <span class="sd">    :type metric_plotted: String</span>
 <span class="sd">    :param view: Whether to display the plot.</span>
@@ -231,8 +236,11 @@
 
         <span class="c1"># Save the graph</span>
         <span class="n">save_graph</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Graph of </span><span class="si">{</span><span class="n">element</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s2">&quot;Testing result&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check if your configuration likes a print or not</span>
         <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="c1"># Close the graph to avoid overlap</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
@@ -241,12 +249,12 @@
 <a class="viewcode-back" href="../utils.html#utils.save_graph">[docs]</a>
 <span class="k">def</span> <span class="nf">save_graph</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Saves a graph to a file.</span>
+<span class="sd">    Save a graph to a file.</span>
 
 <span class="sd">    :param filename: The name of the file to save the graph to.</span>
 <span class="sd">    :type filename: String</span>
-<span class="sd">    :param type_of_graph: The type of the graph (e.g. &#39;Dataset&#39;, &#39;ResNet model&#39;, &#39;Testing result&#39;).</span>
-<span class="sd">    :type type_of_graph: String</span>
+<span class="sd">    :param directory: Directory where to save the graph (e.g. &#39;Dataset&#39;, &#39;ResNet model&#39;, &#39;Testing result&#39;).</span>
+<span class="sd">    :type directory: String</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Get the current path</span>
@@ -254,7 +262,7 @@
     <span class="c1"># Check if the graph folder exists, if not, create it</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;graph&#39;</span><span class="p">)):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;graph&#39;</span><span class="p">))</span>
-    <span class="c1"># Check if the type_of_graph subfolder exists, if not, create it</span>
+    <span class="c1"># Check if the directory subfolder exists, if not, create it</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//graph&#39;</span><span class="p">),</span> <span class="n">directory</span><span class="p">)):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//graph&#39;</span><span class="p">),</span> <span class="n">directory</span><span class="p">))</span>
     <span class="c1"># Save the graph</span>
@@ -266,7 +274,7 @@
 <a class="viewcode-back" href="../utils.html#utils.print_confusion_matrix_graph">[docs]</a>
 <span class="k">def</span> <span class="nf">print_confusion_matrix_graph</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prints a confusion matrix graph for a model.</span>
+<span class="sd">    Print a confusion matrix graph for a model.</span>
 
 <span class="sd">    :param conf_matrix: The confusion matrix to plot.</span>
 <span class="sd">    :type conf_matrix: numpy.ndarray</span>
@@ -285,13 +293,16 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Truth&#39;</span><span class="p">)</span>
     <span class="c1"># Set title</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Heatmap of confusion matrix for ResNet model&quot;</span><span class="p">)</span>
-    <span class="c1"># Improves graph visibility</span>
+
+    <span class="c1"># Improve graph visibility</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
     <span class="c1"># Save the graph to a specific path</span>
     <span class="k">if</span> <span class="n">test</span><span class="p">:</span>
         <span class="n">save_graph</span><span class="p">(</span><span class="s2">&quot;ResNet model</span><span class="se">\&#39;</span><span class="s2">s heatmap&quot;</span><span class="p">,</span> <span class="s1">&#39;Testing result&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">save_graph</span><span class="p">(</span><span class="s1">&#39;Heatmap of confusion matrix&#39;</span><span class="p">,</span> <span class="s2">&quot;ResNet model&quot;</span><span class="p">)</span>
+
     <span class="c1"># Check if your configuration likes a print or not</span>
     <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -304,7 +315,7 @@
 <a class="viewcode-back" href="../utils.html#utils.print_confusion_matrix">[docs]</a>
 <span class="k">def</span> <span class="nf">print_confusion_matrix</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">,</span> <span class="n">class_names</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prints a confusion matrix for the model.</span>
+<span class="sd">    Print a confusion matrix for the model.</span>
 
 <span class="sd">    :param conf_matrix: The confusion matrix to print.</span>
 <span class="sd">    :type conf_matrix: Numpy.ndarray</span>
@@ -316,12 +327,12 @@
     <span class="nb">print</span><span class="p">(</span><span class="n">df_confusion_matrix</span><span class="p">)</span></div>
 
 
-<span class="c1"># Prints the best evaluation metrics found during the evaluation phase</span>
+<span class="c1"># Print the best evaluation metrics found during the evaluation phase</span>
 <div class="viewcode-block" id="print_best_val_metrics">
 <a class="viewcode-back" href="../utils.html#utils.print_best_val_metrics">[docs]</a>
 <span class="k">def</span> <span class="nf">print_best_val_metrics</span><span class="p">(</span><span class="n">best_val_metric</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prints the best model performance on the validation dataset.</span>
+<span class="sd">    Print the best model performance on the validation dataset.</span>
 
 <span class="sd">    :param best_val_metric: The best validation metrics.</span>
 <span class="sd">    :type best_val_metric: Dictionary</span>
@@ -339,12 +350,10 @@
 <a class="viewcode-back" href="../utils.html#utils.print_evaluation">[docs]</a>
 <span class="k">def</span> <span class="nf">print_evaluation</span><span class="p">(</span><span class="n">test_metrics</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prints the evaluation metrics and returns them as a list.</span>
+<span class="sd">    Print the evaluation metrics.</span>
 
 <span class="sd">    :param test_metrics: The test metrics.</span>
 <span class="sd">    :type test_metrics: Dictionary</span>
-<span class="sd">    :return: The test metrics as a list.</span>
-<span class="sd">    :rtype: List</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Store performance in lists so you can pass it to the DataFrame</span>

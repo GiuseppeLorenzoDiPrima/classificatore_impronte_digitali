@@ -78,7 +78,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="c1"># Local application/library specific imports</span>
+<span class="c1"># Local application/library specific import</span>
 <span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">save_graph</span>
 
 
@@ -121,16 +121,16 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A Dataset for PolyU_HRF_DBII images.</span>
 
-<span class="sd">        :param type: The type of the dataset (e.g., &#39;train&#39;, &#39;val&#39;, &#39;test&#39;).</span>
+<span class="sd">        :param type: The type of the dataset (e.g. &#39;train&#39;, &#39;val&#39;, &#39;test&#39;).</span>
 <span class="sd">        :type type: str</span>
 <span class="sd">        :param root: The root directory of the dataset.</span>
 <span class="sd">        :type root: str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># Initializing the variable</span>
+        <span class="c1"># Initialize the variable</span>
         <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-        <span class="c1"># Initializing the path</span>
+        <span class="c1"># Initialize the path</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;train&#39;</span><span class="p">:</span>
             <span class="n">path</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">data_dir</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;train//&quot;</span>
         <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;val&#39;</span><span class="p">:</span>
@@ -146,7 +146,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">ImageFolder</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transformation</span><span class="p">[</span><span class="s1">&#39;testing&#39;</span><span class="p">])</span>
         
-        <span class="c1"># Sets variables</span>
+        <span class="c1"># Set variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">classes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">targets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
@@ -174,7 +174,7 @@
 <a class="viewcode-back" href="../../data_classes.html#data_classes.manage_dataset.class_count">[docs]</a>
 <span class="k">def</span> <span class="nf">class_count</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Counts the number of instances of each class in a dataset.</span>
+<span class="sd">    Count the number of instances of each class in a dataset.</span>
 
 <span class="sd">    :param dataset: The dataset.</span>
 <span class="sd">    :type dataset: Dataset</span>
@@ -189,16 +189,16 @@
     <span class="c1"># Increase the counter for the corresponding class by one</span>
     <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
         <span class="n">elemets</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="c1"># Returns a vector containing the number of elements for each class</span>
+    <span class="c1"># Return a vector containing the number of elements for each class</span>
     <span class="k">return</span> <span class="n">elemets</span></div>
 
     
-<span class="c1"># Print the size of the dataset</span>
+<span class="c1"># Print the size of the dataset for each class</span>
 <div class="viewcode-block" id="print_shapes">
 <a class="viewcode-back" href="../../data_classes.html#data_classes.manage_dataset.print_shapes">[docs]</a>
 <span class="k">def</span> <span class="nf">print_shapes</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prints the shapes of the datasets.</span>
+<span class="sd">    Print the shapes of the datasets.</span>
 
 <span class="sd">    :param train_dataset: The training dataset.</span>
 <span class="sd">    :type train_dataset: Dataset</span>
@@ -213,10 +213,11 @@
     <span class="n">val_class_counts</span> <span class="o">=</span> <span class="n">class_count</span><span class="p">(</span><span class="n">val_dataset</span><span class="p">)</span>
     <span class="n">test_class_counts</span> <span class="o">=</span> <span class="n">class_count</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">)</span>
     
-    <span class="c1"># Print that you are printing datasets shapes</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Datasets shapes:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Print each dataset size splitted by classes</span>
+    <span class="c1"># Print each dataset class size</span>
+
+    <span class="c1"># Train set</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Train size: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Train accidental whorl: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">train_class_counts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Train central pocket loop whorl: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">train_class_counts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -227,6 +228,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Train tended arch: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">train_class_counts</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Train ulnar loop: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">train_class_counts</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+    <span class="c1"># Validation set</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Validation size: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">val_dataset</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Validation accidental whorl: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">val_class_counts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Validation central pocket loop whorl: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">val_class_counts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -237,6 +239,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Validation tended arch: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">val_class_counts</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Validation ulnar loop: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">val_class_counts</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+    <span class="c1"># Test set</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test size: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Test accidental whorl: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">test_class_counts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Test central pocket loop whorl: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">test_class_counts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -248,12 +251,12 @@
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Test ulnar loop: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">test_class_counts</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<span class="c1"># Print a graph to illustrate the distribution of data across train, validation, and test datasets</span>
+<span class="c1"># Print a graph to illustrate the distribution of data across train, validation and test datasets</span>
 <div class="viewcode-block" id="visualize_class_distribution">
 <a class="viewcode-back" href="../../data_classes.html#data_classes.manage_dataset.visualize_class_distribution">[docs]</a>
 <span class="k">def</span> <span class="nf">visualize_class_distribution</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">view</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Visualizes the class distribution in a dataset.</span>
+<span class="sd">    Visualize the class distribution in a dataset.</span>
 
 <span class="sd">    :param dataset: The dataset to visualize.</span>
 <span class="sd">    :type dataset: Dataset</span>
@@ -265,7 +268,7 @@
 
     <span class="c1"># Initialize a vector to zero</span>
     <span class="n">class_counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">classes</span><span class="p">))</span>
-    <span class="c1"># Fills the vector with the number of elements for each class</span>
+    <span class="c1"># Fill the vector with the number of elements for each class</span>
     <span class="n">class_counts</span> <span class="o">=</span> <span class="n">class_count</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 
     <span class="c1"># Print a bar graph according to the colors shown in the order</span>
@@ -280,7 +283,7 @@
     <span class="c1"># If the user expressed the preference in the base_config file, it shows the result</span>
     <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-    <span class="c1"># Closes the graph to avoid overlap</span>
+    <span class="c1"># Close the graph to avoid overlap</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
     
@@ -289,7 +292,7 @@
 <a class="viewcode-back" href="../../data_classes.html#data_classes.manage_dataset.print_dataset_graph">[docs]</a>
 <span class="k">def</span> <span class="nf">print_dataset_graph</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">,</span> <span class="n">view</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prints the class distribution graph for the train, validation, and test datasets.</span>
+<span class="sd">    Print the class distribution graph for the train, validation, and test datasets.</span>
 
 <span class="sd">    :param train_dataset: The training dataset.</span>
 <span class="sd">    :type train_dataset: Dataset</span>
@@ -308,12 +311,12 @@
     <span class="n">visualize_class_distribution</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">,</span> <span class="s2">&quot;Test&quot;</span><span class="p">,</span> <span class="n">view</span><span class="p">)</span></div>
 
 
-<span class="c1"># Creates dataset objects</span>
+<span class="c1"># Create dataset objects</span>
 <div class="viewcode-block" id="load_datasets">
 <a class="viewcode-back" href="../../data_classes.html#data_classes.manage_dataset.load_datasets">[docs]</a>
 <span class="k">def</span> <span class="nf">load_datasets</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Loads the train, validation and test datasets.</span>
+<span class="sd">    Load the train, validation and test datasets.</span>
 
 <span class="sd">    :param config: The configuration for loading the datasets.</span>
 <span class="sd">    :type config: Config</span>

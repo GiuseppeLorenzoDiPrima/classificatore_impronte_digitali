@@ -72,7 +72,7 @@
              
   <h1>Source code for classify</h1><div class="highlight"><pre>
 <span></span><span class="c1">#-----  Command to run from terminal  -----#</span>
-<span class="c1"># python -u classify.py -c config/base_config.yaml</span>
+<span class="c1"># Classify command: python -u classify.py -c config/base_config.yaml</span>
 
 <span class="c1"># Third-party imports</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -82,7 +82,7 @@
 <span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
-<span class="c1"># Local application/library specific imports</span>
+<span class="c1"># Local application/library specific import</span>
 <span class="kn">from</span> <span class="nn">model_classes.resnet_model</span> <span class="kn">import</span> <span class="n">ResNet</span><span class="p">,</span> <span class="n">ResidualBlock</span>
 
 <span class="c1"># Configuration and utility imports</span>
@@ -99,7 +99,7 @@
 <span class="p">])</span>
 
 
-<span class="c1"># Custom class to create PolyU_HRF_DBII dataset</span>
+<span class="c1"># Custom class to create PolyU_HRF_DBII dataset without labels</span>
 <div class="viewcode-block" id="PolyU_HRF_DBII">
 <a class="viewcode-back" href="../classify.html#classify.PolyU_HRF_DBII">[docs]</a>
 <span class="k">class</span> <span class="nc">PolyU_HRF_DBII</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
@@ -117,19 +117,26 @@
 <span class="sd">        :type transform: torchvision.transform</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">image_folder</span> <span class="o">=</span> <span class="n">image_folder</span> <span class="c1"># Set folder with images to classify</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span> <span class="c1"># Set transormation</span>
+        <span class="c1"># Set folder with images to classify</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_folder</span> <span class="o">=</span> <span class="n">image_folder</span>
+        <span class="c1"># Set transormation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span>
+        <span class="c1"># Iniziaize variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">image_folder</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">image_folder</span><span class="p">)</span> <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="s1">&#39;.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;.jpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;.bmp&#39;</span><span class="p">,</span> <span class="s1">&#39;.tiff&#39;</span><span class="p">))]</span> <span class="c1"># Select only image</span>
+        <span class="c1"># Select only image files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">image_folder</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">image_folder</span><span class="p">)</span> <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="s1">&#39;.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;.jpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;.bmp&#39;</span><span class="p">,</span> <span class="s1">&#39;.tiff&#39;</span><span class="p">))]</span>
 
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
-        <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="c1"># Compute image path</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span> <span class="c1"># Load image</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">:</span> <span class="c1"># Apply tranformation</span>
+        <span class="c1"># Compute image path</span>
+        <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="c1"># Load image</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
+        <span class="c1"># Apply tranformation</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">:</span> 
             <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
         <span class="n">item</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;image&#39;</span> <span class="p">:</span> <span class="n">image</span><span class="p">,</span>
@@ -188,7 +195,7 @@
     <span class="c1"># 3. Load model weights</span>
     <span class="c1"># ---------------------</span>
     
-    <span class="c1"># Loads the saved model weights to the specified folder during training</span>
+    <span class="c1"># Load the saved model weights to the specified folder during training</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading ResNet model...&quot;</span><span class="p">)</span>
     <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">checkpoint_dir</span><span class="si">}</span><span class="s2">/ResNet_best_model.pt&quot;</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&gt; ResNet model loaded.&quot;</span><span class="p">)</span>
@@ -253,11 +260,12 @@
     <span class="c1"># 2. Set device</span>
     <span class="c1"># ---------------------</span>
     
-    <span class="c1"># Selecting the device to run with: CUDA -&gt; GPU; CPU -&gt; CPU</span>
+    <span class="c1"># Select the device to run with: CUDA -&gt; GPU; CPU -&gt; CPU</span>
     <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;cuda&#39;</span> <span class="ow">and</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
         <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+    
     <span class="c1"># Print selected device</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Device: &quot;</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">get_device_name</span><span class="p">())</span> 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---------------------&quot;</span><span class="p">)</span>
@@ -268,6 +276,7 @@
     
     <span class="c1"># Set/create folder for classification</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">classification</span><span class="o">.</span><span class="n">image_folder</span><span class="p">)):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">classification</span><span class="o">.</span><span class="n">image_folder</span><span class="p">))</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error no </span><span class="se">\&quot;</span><span class="s2">Fingerprint_to_classify</span><span class="se">\&quot;</span><span class="s2"> directory found. It has been created right now. Please insert there image you want to classify.&quot;</span><span class="p">)</span>

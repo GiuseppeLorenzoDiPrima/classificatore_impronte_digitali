@@ -5,20 +5,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Standard library imports
+# Standard library import
 import os
 
 
 # Calculate performance metrics
 def compute_metrics(predictions, references):
     """
-    Computes accuracy, precision, recall, and F1 score.
+    Compute accuracy, precision, recall and F1 score.
 
     :param predictions: The predicted labels.
     :type predictions: List
     :param references: The true labels.
     :type references: List
-    :return: A dictionary containing the accuracy, precision, recall, and F1 score.
+    :return: A dictionary containing the accuracy, precision, recall and F1 score.
     :rtype: Dictionary
     """
 
@@ -39,7 +39,7 @@ def compute_metrics(predictions, references):
 # Evaluate performance metrics and confusion matrix
 def evaluate(model, dataloader, criterion, device):
     """
-    Evaluates a model on a given dataset.
+    Evaluate a model on a given dataset.
 
     :param model: The model to be evaluated.
     :type model: torch.nn.Module
@@ -47,9 +47,9 @@ def evaluate(model, dataloader, criterion, device):
     :type dataloader: torch.utils.data.DataLoader
     :param criterion: The criterion to use for calculating loss during evaluation.
     :type criterion: torch.nn.modules.loss._Loss
-    :param device: The device on which to evaluate the model (e.g., 'cpu', 'cuda').
+    :param device: The device on which to evaluate the model (e.g. 'cpu', 'cuda').
     :type device: String
-    :return: Returns the evaluation metrics and confusion matrix.
+    :return: Return the evaluation metrics and confusion matrix.
     :rtype: tuple (dict, numpy.ndarray)
     """
 
@@ -85,13 +85,14 @@ def evaluate(model, dataloader, criterion, device):
     val_metrics['loss'] = running_loss / len(dataloader)
     # Calculate the confusion matrix
     conf_matrix = confusion_matrix(predictions, references)
+
     # Return metrics and confusion matrix
     return val_metrics, conf_matrix
 
 # Create the graph for train and validation performance metrics
 def print_metrics_graph(training_metrics, validation_metrics, metric_plotted, view):
     """
-    Prints the graph of a given metric for the training and validation datasets.
+    Print the graph of a given metric for the training and validation datasets.
 
     :param training_metrics: The training metrics.
     :type training_metrics: List
@@ -111,9 +112,13 @@ def print_metrics_graph(training_metrics, validation_metrics, metric_plotted, vi
         plt.plot([metrics[element] for metrics in validation_metrics], label = 'Validation')
         plt.legend()
         plt.title("Graph of " + str(element) + " per epoch for ResNet model:")
-        # Improves graph visibility
+
+        # Improve graph visibility
         plt.tight_layout()
+
+        # Save the graph
         save_graph(str('Graph of ' + str(element)), "ResNet model")
+
         # Check if your configuration likes a print or not
         if view:
             plt.show()
@@ -123,10 +128,10 @@ def print_metrics_graph(training_metrics, validation_metrics, metric_plotted, vi
 # Create the graph for test performance metrics
 def print_test_metrics_graph(metrics, metric_plotted, view):
     """
-    Prints the graph of a given metric for the testing datasets.
+    Print the graph of a given metric for the testing datasets.
 
-    :param metrics_list: The metrics.
-    :type metrics_list: List
+    :param metrics: The metrics.
+    :type metrics: List
     :param metric_plotted: The metric to be plotted.
     :type metric_plotted: String
     :param view: Whether to display the plot.
@@ -147,19 +152,22 @@ def print_test_metrics_graph(metrics, metric_plotted, view):
 
         # Save the graph
         save_graph(f'Graph of {element}', "Testing result")
+
+        # Check if your configuration likes a print or not
         if view:
             plt.show()
+        # Close the graph to avoid overlap
         plt.close()
 
 # Save the created graph
 def save_graph(filename, directory):
     """
-    Saves a graph to a file.
+    Save a graph to a file.
 
     :param filename: The name of the file to save the graph to.
     :type filename: String
-    :param type_of_graph: The type of the graph (e.g. 'Dataset', 'ResNet model', 'Testing result').
-    :type type_of_graph: String
+    :param directory: Directory where to save the graph (e.g. 'Dataset', 'ResNet model', 'Testing result').
+    :type directory: String
     """
 
     # Get the current path
@@ -167,7 +175,7 @@ def save_graph(filename, directory):
     # Check if the graph folder exists, if not, create it
     if not os.path.exists(os.path.join(path, 'graph')):
         os.makedirs(os.path.join(path, 'graph'))
-    # Check if the type_of_graph subfolder exists, if not, create it
+    # Check if the directory subfolder exists, if not, create it
     if not os.path.exists(os.path.join((str(path) + '//graph'), directory)):
         os.makedirs(os.path.join((str(path) + '//graph'), directory))
     # Save the graph
@@ -176,7 +184,7 @@ def save_graph(filename, directory):
 # Create a graph for the confusion matrix
 def print_confusion_matrix_graph(conf_matrix, view, test):
     """
-    Prints a confusion matrix graph for a model.
+    Print a confusion matrix graph for a model.
 
     :param conf_matrix: The confusion matrix to plot.
     :type conf_matrix: numpy.ndarray
@@ -195,13 +203,16 @@ def print_confusion_matrix_graph(conf_matrix, view, test):
     plt.ylabel('Truth')
     # Set title
     plt.title(f"Heatmap of confusion matrix for ResNet model")
-    # Improves graph visibility
+
+    # Improve graph visibility
     plt.tight_layout()
+
     # Save the graph to a specific path
     if test:
         save_graph("ResNet model\'s heatmap", 'Testing result')
     else:
         save_graph('Heatmap of confusion matrix', "ResNet model")
+
     # Check if your configuration likes a print or not
     if view:
         plt.show()
@@ -211,7 +222,7 @@ def print_confusion_matrix_graph(conf_matrix, view, test):
 # Print confusion matrix on the screen
 def print_confusion_matrix(conf_matrix, class_names):
     """
-    Prints a confusion matrix for the model.
+    Print a confusion matrix for the model.
 
     :param conf_matrix: The confusion matrix to print.
     :type conf_matrix: Numpy.ndarray
@@ -222,10 +233,10 @@ def print_confusion_matrix(conf_matrix, class_names):
     df_confusion_matrix = pd.DataFrame(conf_matrix, index=class_names, columns=class_names)
     print(df_confusion_matrix)
 
-# Prints the best evaluation metrics found during the evaluation phase
+# Print the best evaluation metrics found during the evaluation phase
 def print_best_val_metrics(best_val_metric):
     """
-    Prints the best model performance on the validation dataset.
+    Print the best model performance on the validation dataset.
 
     :param best_val_metric: The best validation metrics.
     :type best_val_metric: Dictionary
@@ -240,12 +251,10 @@ def print_best_val_metrics(best_val_metric):
 # Print the result of the evaluation
 def print_evaluation(test_metrics):
     """
-    Prints the evaluation metrics and returns them as a list.
+    Print the evaluation metrics.
 
     :param test_metrics: The test metrics.
     :type test_metrics: Dictionary
-    :return: The test metrics as a list.
-    :rtype: List
     """
 
     # Store performance in lists so you can pass it to the DataFrame

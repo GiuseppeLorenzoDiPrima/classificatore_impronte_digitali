@@ -1,5 +1,5 @@
 #-----  Command to run from terminal  -----#
-# python -u test.py -c config/base_config.yaml
+# Test command: python -u test.py -c config/base_config.yaml
 
 # Third-party imports
 import torch
@@ -17,30 +17,28 @@ from addict import Dict
 # Print test set performance metrics
 def print_metrics(metrics):
     """
-    Prints the metrics.
+    Print the metrics.
 
     :param metrics: Dictionary of metrics to print.
     :type metrics: Dict
     """
 
     print("\nResNet model performance:\n")
-    # Scrolls through the dictionary and prints performance metrics
+    # Scroll through the dictionary and print performance metrics
     for key, value in metrics.items():
         print(f"Test {key}: {value:.4f}")
 
 # Test the ResNet model
 def test_model(config, device, test_dataset):
     """
-    This function tests a deep learning model on a test dataset.
+    This function tests a ResNet model on a test dataset.
 
-    :param config: The configuration settings for testing the model.
+    :param config: The configuration settings to test the model.
     :type config: object
-    :param device: The device on which to test the model (e.g., 'cpu', 'cuda').
+    :param device: The device on which to test the model (e.g. 'cpu', 'cuda').
     :type device: str
-    :param test_dataset: The dataset used for testing the model.
+    :param test_dataset: The dataset used to test the model.
     :type test_dataset: torch.utils.data.Dataset
-    :return: Returns the metrics for the test dataset.
-    :rtype: dict
     """
     
     # ---------------------
@@ -77,7 +75,7 @@ def test_model(config, device, test_dataset):
     # 3. Load model weights
     # ---------------------
     
-    # Loads the saved model weights to the specified folder during training
+    # Load the saved model weights to the specified folder during training
     print("Loading ResNet model...")
     model.load_state_dict(torch.load(f"{config.training.checkpoint_dir}/ResNet_best_model.pt"))
     print("-> ResNet model loaded.")
@@ -87,7 +85,7 @@ def test_model(config, device, test_dataset):
     # 4. Criterion
     # ---------------------
     
-    # Defines the CrossEntropyLoss as loss functions for ResNet model
+    # Define the Cross-Entropy Loss as loss functions for ResNet model
     criterion = nn.CrossEntropyLoss()
     
     # ---------------------
@@ -97,10 +95,10 @@ def test_model(config, device, test_dataset):
     print("Evaluating model...\n")
     # Evaluate model performance
     metrics, conf_matrix = evaluate(model, test_dl, criterion, device)
-    # Prints the confusion matrix of the model
+    # Print the confusion matrix of the model
     print_confusion_matrix(conf_matrix, config.classification.class_names)
     print("---------------------")
-    # Print confusion matrices graphs
+    # Depending on the configuration you choose, create graphs for confusion matrix
     if config.graph.create_model_graph:
         print_confusion_matrix_graph(conf_matrix, config.graph.view_model_graph, test=True)
 
@@ -110,6 +108,7 @@ def test_model(config, device, test_dataset):
     
     print("Performance:")
     print_metrics(metrics)
+    # Depending on the configuration you choose, create graphs for test metrics
     if config.graph.create_model_graph:
         print_test_metrics_graph(metrics, config.graph.metric_plotted_during_testing, config.graph.view_model_graph)
 
@@ -125,8 +124,7 @@ if __name__ == '__main__':
     2. Set device
     3. Load data
     4. Verify the presence of saved model
-    5. Test on saved model
-    6. Print performance    
+    5. Test on saved model 
     """
     
     # ---------------------
@@ -162,6 +160,7 @@ if __name__ == '__main__':
     # ---------------------
     
     path = os.getcwd()
+
     # No checkpoints directory
     if not os.path.exists(os.path.join(path + "/", config.training.checkpoint_dir)):
         os.makedirs(os.path.join(path + "/", config.training.checkpoint_dir))
@@ -172,7 +171,7 @@ if __name__ == '__main__':
         raise Exception("Error no saved model.")
     
     # ---------------------
-    # 5. Test on saved models
+    # 5. Test on saved model
     # ---------------------
     
     # Test ResNet model

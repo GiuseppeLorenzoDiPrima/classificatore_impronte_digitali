@@ -72,11 +72,11 @@
              
   <h1>Source code for train</h1><div class="highlight"><pre>
 <span></span><span class="c1">#-----  Command to run from terminal  -----#</span>
-<span class="c1"># python -u train.py -c config/base_config.yaml</span>
+<span class="c1"># Train command: python -u train.py -c config/base_config.yaml</span>
 <span class="c1"># Documentation command [execute in path &quot;..\doc&quot;]: .\make.bat html</span>
 
 
-<span class="c1"># Standard library imports</span>
+<span class="c1"># Standard library import</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="c1"># Third-party imports</span>
@@ -99,7 +99,7 @@
 <a class="viewcode-back" href="../train.html#train.train_one_epoch">[docs]</a>
 <span class="k">def</span> <span class="nf">train_one_epoch</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dataloader</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Trains a model for one epoch.</span>
+<span class="sd">    Train a model for one epoch.</span>
 
 <span class="sd">    :param model: The model to be trained.</span>
 <span class="sd">    :type model: torch.nn.Module</span>
@@ -111,7 +111,7 @@
 <span class="sd">    :type optimizer: torch.optim.Optimizer</span>
 <span class="sd">    :param scheduler: The learning rate scheduler.</span>
 <span class="sd">    :type scheduler: torch.optim.lr_scheduler._LRScheduler</span>
-<span class="sd">    :param device: The device on which to train the model (e.g., &#39;cpu&#39;, &#39;cuda&#39;).</span>
+<span class="sd">    :param device: The device on which to train the model (e.g. &#39;cpu&#39;, &#39;cuda&#39;).</span>
 <span class="sd">    :type device: str</span>
 <span class="sd">    :return: Returns a dictionary containing the performance metrics of the training dataset.</span>
 <span class="sd">    :rtype: dict</span>
@@ -123,12 +123,13 @@
     <span class="n">running_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">references</span> <span class="o">=</span> <span class="p">[]</span>
+    
     <span class="c1"># Batch execution</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">dataloader</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Training&#39;</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">dataloader</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Training&#39;</span><span class="p">)):</span>
         <span class="c1"># Upload images and labels</span>
         <span class="n">images</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
         <span class="n">labels</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-        <span class="c1"># Erasing old gradient values</span>
+        <span class="c1"># Erase old gradient values</span>
         <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
         <span class="c1"># Calculate output</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
@@ -138,7 +139,7 @@
         <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
         <span class="c1"># Optimization</span>
         <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-        <span class="c1"># Scheduler learning rate</span>
+        <span class="c1"># Learning rate scheduler</span>
         <span class="n">scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
         <span class="c1"># Add the current loss to the total</span>
         <span class="n">running_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
@@ -147,10 +148,12 @@
         <span class="n">predictions</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
         <span class="c1"># Compute refereces</span>
         <span class="n">references</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
     <span class="c1"># Compute performance metrics based on differences between predictiones and references </span>
     <span class="n">train_metrics</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">references</span><span class="p">)</span>
     <span class="c1"># Add loss to performance metrics</span>
     <span class="n">train_metrics</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">running_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataloader</span><span class="p">)</span>
+
     <span class="c1"># Return performance metrics</span>
     <span class="k">return</span> <span class="n">train_metrics</span></div>
 
@@ -160,7 +163,7 @@
 <a class="viewcode-back" href="../train.html#train.manage_best_model_and_metrics">[docs]</a>
 <span class="k">def</span> <span class="nf">manage_best_model_and_metrics</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">evaluation_metric</span><span class="p">,</span> <span class="n">val_metrics</span><span class="p">,</span> <span class="n">best_val_metric</span><span class="p">,</span> <span class="n">best_model</span><span class="p">,</span> <span class="n">lower_is_better</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Manages the best model and its metrics.</span>
+<span class="sd">    Manage the best model and its metrics.</span>
 
 <span class="sd">    :param model: The current model.</span>
 <span class="sd">    :type model: torch.nn.Module</span>
@@ -174,7 +177,7 @@
 <span class="sd">    :type best_model: torch.nn.Module</span>
 <span class="sd">    :param lower_is_better: Whether a lower metric value is better.</span>
 <span class="sd">    :type lower_is_better: bool</span>
-<span class="sd">    :return: Returns the best validation metrics and the best model.</span>
+<span class="sd">    :return: Return the best validation metrics and the best model.</span>
 <span class="sd">    :rtype: tuple (dict, torch.nn.Module)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -190,7 +193,7 @@
     <span class="k">return</span> <span class="n">best_val_metric</span><span class="p">,</span> <span class="n">best_model</span></div>
 
 
-<span class="c1"># Train deep learning models</span>
+<span class="c1"># Train ResNet model</span>
 <div class="viewcode-block" id="train_model">
 <a class="viewcode-back" href="../train.html#train.train_model">[docs]</a>
 <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">train_dl</span><span class="p">,</span> <span class="n">val_dl</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">criterion</span><span class="p">):</span>
@@ -225,7 +228,8 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">)</span>
     
-    <span class="c1"># learning rate scheduler</span>
+    <span class="c1"># --- learning rate scheduler --- #</span>
+
     <span class="n">total_steps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_dl</span><span class="p">)</span> <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">deep_learning_training</span><span class="o">.</span><span class="n">epochs</span>
     <span class="n">warmup_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_steps</span> <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">deep_learning_training</span><span class="o">.</span><span class="n">warmup_ratio</span><span class="p">)</span>
     <span class="c1"># Warmup for [warmup_ratio]% and linear decay</span>
@@ -256,7 +260,7 @@
         <span class="c1"># Print results</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Train loss: </span><span class="si">{</span><span class="n">train_metrics</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> - Train accuracy: </span><span class="si">{</span><span class="n">train_metrics</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Val loss: </span><span class="si">{</span><span class="n">val_metrics</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> - Val accuracy: </span><span class="si">{</span><span class="n">val_metrics</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="c1"># Calculates the new best model and new best performance as a result of the last training</span>
+        <span class="c1"># Calculate the new best model and new best performance as a result of the last training</span>
         <span class="n">best_val_metric</span><span class="p">,</span> <span class="n">best_model</span> <span class="o">=</span> <span class="n">manage_best_model_and_metrics</span><span class="p">(</span>
             <span class="n">model</span><span class="p">,</span> 
             <span class="n">config</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">evaluation_metric</span><span class="p">,</span> 
@@ -266,7 +270,8 @@
             <span class="n">config</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">best_metric_lower_is_better</span>
         <span class="p">)</span>
         
-        <span class="c1"># Earling stopping</span>
+        <span class="c1"># --- Earling stopping --- #</span>
+
         <span class="c1"># Check which metric was chosen for early stopping</span>
         <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">early_stopping_metric</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;loss&#39;</span><span class="p">:</span>
             <span class="c1"># If performance is not improved, the early stopping counter increases by one</span>
@@ -280,7 +285,7 @@
         <span class="k">if</span> <span class="n">no_valid_epochs</span> <span class="o">==</span> <span class="n">config</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">earling_stopping_max_no_valid_epochs</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The training process has ended because the maximum value of early stopping, which is </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">earling_stopping_max_no_valid_epochs</span><span class="si">:}</span><span class="s2">, has been reached.&quot;</span><span class="p">)</span>
             <span class="k">break</span>
-    <span class="c1"># Returns the best metrics, best model, and performance history for training and validation</span>
+    <span class="c1"># Return the best metrics, best model, and performance history for training and validation</span>
     <span class="k">return</span> <span class="n">best_val_metric</span><span class="p">,</span> <span class="n">best_model</span><span class="p">,</span> <span class="n">training_metrics_list</span><span class="p">,</span> <span class="n">validation_metrics_list</span></div>
 
 
@@ -299,9 +304,9 @@
 <span class="sd">    :type test_set: torch.utils.data.DataLoader</span>
 <span class="sd">    :param criterion: The criterion to use for calculating loss during evaluation.</span>
 <span class="sd">    :type criterion: torch.nn.modules.loss._Loss</span>
-<span class="sd">    :param device: The device on which to evaluate the model (e.g., &#39;cpu&#39;, &#39;cuda&#39;).</span>
+<span class="sd">    :param device: The device on which to evaluate the model (e.g. &#39;cpu&#39;, &#39;cuda&#39;).</span>
 <span class="sd">    :type device: str</span>
-<span class="sd">    :return: Returns the metrics and confusion matrix for the test dataset.</span>
+<span class="sd">    :return: Return the metrics and confusion matrix for the test dataset.</span>
 <span class="sd">    :rtype: tuple (list, numpy.ndarray)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -309,22 +314,22 @@
     <span class="n">print_best_val_metrics</span><span class="p">(</span><span class="n">best_val_metric</span><span class="p">)</span>
     <span class="c1"># Evaluate the performance of the test_dataset</span>
     <span class="n">test_metrics</span><span class="p">,</span> <span class="n">conf_matrix</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">best_model</span><span class="p">,</span> <span class="n">test_set</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
-    <span class="c1"># Compute performance metrics</span>
+    <span class="c1"># Compute and print performance metrics</span>
     <span class="n">print_evaluation</span><span class="p">(</span><span class="n">test_metrics</span><span class="p">)</span>
-    <span class="c1"># Return performance metrics and confusion matrix</span>
+    <span class="c1"># Return confusion matrix</span>
     <span class="k">return</span> <span class="n">conf_matrix</span></div>
 
   
-<span class="c1"># Train the deep learning model</span>
+<span class="c1"># Train the ResNet model</span>
 <div class="viewcode-block" id="setup_train_evaluate">
 <a class="viewcode-back" href="../train.html#train.setup_train_evaluate">[docs]</a>
 <span class="k">def</span> <span class="nf">setup_train_evaluate</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function trains a deep learning model and evaluates its performance.</span>
+<span class="sd">    This function trains a ResNet model and evaluates its performance.</span>
 
 <span class="sd">    :param config: The configuration settings for training the model.</span>
 <span class="sd">    :type config: object</span>
-<span class="sd">    :param device: The device on which to train the model (e.g., &#39;cpu&#39; or &#39;cuda&#39;).</span>
+<span class="sd">    :param device: The device on which to train the model (e.g. &#39;cpu&#39; or &#39;cuda&#39;).</span>
 <span class="sd">    :type device: str</span>
 <span class="sd">    :param train_dataset: The dataset used for training the model.</span>
 <span class="sd">    :type train_dataset: torch.utils.data.Dataset</span>
@@ -459,7 +464,7 @@
     <span class="c1"># 2. Device configuration</span>
     <span class="c1"># ---------------------</span>
     
-    <span class="c1"># Selecting the device to run with: CUDA -&gt; GPU; CPU -&gt; CPU</span>
+    <span class="c1"># Select the device to run with: CUDA -&gt; GPU; CPU -&gt; CPU</span>
     <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;cuda&#39;</span> <span class="ow">and</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
         <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
