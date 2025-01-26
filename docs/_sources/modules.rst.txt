@@ -6,7 +6,6 @@ Progetto esame
 
    classify
    data_classes
-   extract_representations
    model_classes
    test
    train

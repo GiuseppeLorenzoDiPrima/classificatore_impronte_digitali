@@ -84,11 +84,9 @@ class PolyU_HRF_DBII(Dataset):
     def __getitem__(self, idx):
         if self.data:
             image, label = self.data[idx]
-            image_path = self.data.samples[idx][0]
             item = {
                 'image' : image,
                 'label' : label,
-                # 'image_path': image_path # Used for debug
             }
             return item
         else:
@@ -185,6 +183,7 @@ def visualize_class_distribution(dataset, dataset_name, view):
     class_counts = np.zeros(len(dataset.classes))
     # Fills the vector with the number of elements for each class
     class_counts = class_count(dataset)
+
     # Print a bar graph according to the colors shown in the order
     plt.bar(dataset.classes, class_counts, color=['blue', 'orange', 'red', 'yellow', 'purple', 'green', 'gray', 'pink'])
     # Add labels and title
@@ -193,6 +192,7 @@ def visualize_class_distribution(dataset, dataset_name, view):
     plt.title(f"Class distribution in the {dataset_name.lower()} dataset")
     # Save graphs in the graph folder
     save_graph(dataset_name, 'Dataset')
+    
     # If the user expressed the preference in the base_config file, it shows the result
     if view:
         plt.show()
@@ -238,7 +238,9 @@ def load_datasets(config):
     
     # Print statistics
     print_shapes(train_dataset, val_dataset, test_dataset)
+
     # If the user expressed the preference in the base_config file, it create the graph
     if config.graph.create_dataset_graph:
         print_dataset_graph(train_dataset, val_dataset, test_dataset, config.graph.view_dataset_graph)
+
     return train_dataset, val_dataset, test_dataset

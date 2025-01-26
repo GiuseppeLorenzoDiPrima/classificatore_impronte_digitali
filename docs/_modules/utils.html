@@ -41,8 +41,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Progetto esame</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -73,7 +76,6 @@
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">confusion_matrix</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
 <span class="c1"># Standard library imports</span>
@@ -136,10 +138,6 @@
     <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">references</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># Used for debug</span>
-    <span class="c1"># misclassified = []</span>
-    <span class="c1">#class_names = [&#39;accidental whorl&#39;, &#39;central pocket loop whorl&#39;, &#39;double loop whorl&#39;, &#39;plain arch&#39;,&#39;plain whorl&#39;, &#39;radial loop&#39;, &#39;tended arch&#39;, &#39;ulnar loop&#39;]</span>
-
     <span class="c1"># Specify that you don&#39;t want to calculate the gradient to save computational power</span>
     <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
         <span class="c1"># Iterates through all batches in the dataloader</span>
@@ -159,18 +157,6 @@
             <span class="c1"># Compute refereces</span>
             <span class="n">references</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
 
-    <span class="c1"># --- DEGUB --- See what type of error has happened</span>
-
-    <span class="c1">#         predictions_batch = pred.cpu().numpy()</span>
-    <span class="c1">#         labels_batch = labels.cpu().numpy()</span>
-    <span class="c1">#         # Identify misclassified samples</span>
-    <span class="c1">#         for i in range(len(labels_batch)):</span>
-    <span class="c1">#             if pred[i] != labels[i]:</span>
-    <span class="c1">#                 misclassified.append({ &#39;image_path&#39;: batch[&#39;image_path&#39;][i], &#39;correct_label&#39;: class_names[labels_batch[i].item()], &#39;predicted_label&#39;: class_names[predictions_batch[i].item()] })</span>
-    <span class="c1"># # Print misclassified samples</span>
-    <span class="c1"># for error in misclassified:</span>
-    <span class="c1">#     print(f&quot;Image: {error[&#39;image_path&#39;]}, Correct Class: {error[&#39;correct_label&#39;]}, Predicted Class: {error[&#39;predicted_label&#39;]}&quot;)</span>
-
     <span class="c1"># Compute performance metrics based on differences between predictiones and references</span>
     <span class="n">val_metrics</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">references</span><span class="p">)</span>
     <span class="c1"># Add loss to performance metrics</span>
@@ -181,32 +167,10 @@
     <span class="k">return</span> <span class="n">val_metrics</span><span class="p">,</span> <span class="n">conf_matrix</span></div>
 
 
-<span class="c1"># Compare performance between the models</span>
-<div class="viewcode-block" id="compare_performance">
-<a class="viewcode-back" href="../utils.html#utils.compare_performance">[docs]</a>
-<span class="k">def</span> <span class="nf">compare_performance</span><span class="p">(</span><span class="n">metrics_list</span><span class="p">,</span> <span class="n">model_to_train</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function compares the performance metrics between multiple models.</span>
-
-<span class="sd">    :param metrics_list: A list of performance metrics for each model.</span>
-<span class="sd">    :type metrics_list: list</span>
-<span class="sd">    :param model_to_train: A list of model names that were trained.</span>
-<span class="sd">    :type model_to_train: list</span>
-<span class="sd">    :return: None</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Comparing performance:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="c1"># Initialize variables</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Test accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;Test precision&#39;</span><span class="p">,</span> <span class="s1">&#39;Test recall&#39;</span><span class="p">,</span> <span class="s1">&#39;Test f1 score&#39;</span><span class="p">,</span> <span class="s1">&#39;Test loss&#39;</span><span class="p">]</span>
-    <span class="c1"># Print metrics</span>
-    <span class="n">test_result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">metrics_list</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">model_to_train</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">test_result</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span></div>
-
-
-<span class="c1"># Create the graph for performance metrics</span>
+<span class="c1"># Create the graph for train and validation performance metrics</span>
 <div class="viewcode-block" id="print_metrics_graph">
 <a class="viewcode-back" href="../utils.html#utils.print_metrics_graph">[docs]</a>
-<span class="k">def</span> <span class="nf">print_metrics_graph</span><span class="p">(</span><span class="n">training_metrics</span><span class="p">,</span> <span class="n">validation_metrics</span><span class="p">,</span> <span class="n">metric_plotted</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">type_model</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">print_metrics_graph</span><span class="p">(</span><span class="n">training_metrics</span><span class="p">,</span> <span class="n">validation_metrics</span><span class="p">,</span> <span class="n">metric_plotted</span><span class="p">,</span> <span class="n">view</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Prints the graph of a given metric for the training and validation datasets.</span>
 
@@ -218,123 +182,19 @@
 <span class="sd">    :type metric_plotted: String</span>
 <span class="sd">    :param view: Whether to display the plot.</span>
 <span class="sd">    :type view: bool</span>
-<span class="sd">    :param type_model: The type of the model (e.g., &#39;ResNet&#39;, &#39;CNN&#39;, &#39;SVM&#39;).</span>
-<span class="sd">    :type type_model: String</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Print the graph with for all epochs for training and validation for each performance metric</span>
     
-    <span class="c1"># For deep learning models</span>
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">training_metrics</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">validation_metrics</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">metric_plotted</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">metrics</span><span class="p">[</span><span class="n">element</span><span class="p">]</span> <span class="k">for</span> <span class="n">metrics</span> <span class="ow">in</span> <span class="n">training_metrics</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Training&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">metrics</span><span class="p">[</span><span class="n">element</span><span class="p">]</span> <span class="k">for</span> <span class="n">metrics</span> <span class="ow">in</span> <span class="n">validation_metrics</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Validation&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Graph of &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; per epoch for &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">type_model</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; model:&quot;</span><span class="p">)</span>
-            <span class="c1"># Improves graph visibility</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-            <span class="n">save_graph</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;Graph of &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="p">)),</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">type_model</span><span class="p">)</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; model&#39;</span><span class="p">))</span>
-            <span class="c1"># Check if your configuration likes a print or not</span>
-            <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-            <span class="c1"># Close the graph to avoid overlap</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    
-    <span class="c1"># For machine learning models</span>
-    <span class="k">else</span><span class="p">:</span> 
-        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">metric_plotted</span><span class="p">:</span>
-            <span class="n">current_ticks</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()</span>
-            <span class="c1"># Enter the values of the two bars in the vertical scale</span>
-            <span class="n">new_ticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">current_ticks</span><span class="p">,</span> <span class="p">[</span><span class="n">training_metrics</span><span class="p">[</span><span class="n">element</span><span class="p">],</span> <span class="n">validation_metrics</span><span class="p">[</span><span class="n">element</span><span class="p">]])))</span>
-            <span class="c1"># Upgrade the vertical scale</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">new_ticks</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">training_metrics</span><span class="p">[</span><span class="n">element</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Training&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="n">validation_metrics</span><span class="p">[</span><span class="n">element</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Validation&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Graph of &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; for &quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">type_model</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; model:&quot;</span><span class="p">)</span>
-            <span class="c1"># Improves graph visibility</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-            <span class="n">save_graph</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;Graph of &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="p">)),</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">type_model</span><span class="p">)</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; model&#39;</span><span class="p">))</span>
-            <span class="c1"># Check if your configuration likes a print or not</span>
-            <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-            <span class="c1"># Close the graph to avoid overlap</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
-
-
-<span class="c1"># Create the graph to compare performance of the models</span>
-<div class="viewcode-block" id="print_compare_graph">
-<a class="viewcode-back" href="../utils.html#utils.print_compare_graph">[docs]</a>
-<span class="k">def</span> <span class="nf">print_compare_graph</span><span class="p">(</span><span class="n">metrics_list</span><span class="p">,</span> <span class="n">model_to_train</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function creates graphs to compare the performance of multiple models.</span>
-
-<span class="sd">    :param metrics_list: A list of performance metrics for each model.</span>
-<span class="sd">    :type metrics_list: list</span>
-<span class="sd">    :param model_to_train: A list of model names that were trained.</span>
-<span class="sd">    :type model_to_train: list</span>
-<span class="sd">    :param view: A boolean indicating whether to display the graphs.</span>
-<span class="sd">    :type view: bool</span>
-<span class="sd">    :param test: A boolean indicating whether the graphs are for testing results.</span>
-<span class="sd">    :type test: bool</span>
-<span class="sd">    :return: None</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Inizialize metris</span>
-    <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;precision&#39;</span><span class="p">,</span> <span class="s1">&#39;recall&#39;</span><span class="p">,</span> <span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;loss&#39;</span><span class="p">]</span>
-    <span class="c1"># For each metric, print a graph</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">)):</span>
-        <span class="c1"># Inizialize an array</span>
-        <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">model_to_train</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">model_to_train</span><span class="p">)):</span>
-            <span class="c1"># Fill array with i-th performance metrics for each model</span>
-            <span class="n">counts</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">metrics_list</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-        <span class="c1"># Create a bar graph</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">model_to_train</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="s1">&#39;purple&#39;</span><span class="p">])</span>
-        <span class="c1"># Set labels and title</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Models&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Values&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Comparing &quot;</span> <span class="o">+</span> <span class="n">metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; per epoch for models:&quot;</span><span class="p">)</span>
-        <span class="c1"># Retrieve the vertical scale of the graph</span>
-        <span class="n">current_ticks</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()</span>
-        <span class="c1"># Enter the values of the three bars in the vertical scale</span>
-        <span class="n">new_ticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">current_ticks</span><span class="p">,</span> <span class="n">counts</span><span class="p">)))</span>
-        <span class="c1"># Upgrade the vertical scale</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">new_ticks</span><span class="p">)</span>
-        <span class="c1"># Horizontal dashed lines at bar levels, compute gap and set y position to locate the texts &quot;Difference&quot;</span>
-        <span class="n">first_gap</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">counts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">first_y_pos</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.02</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">)</span>   
-        <span class="c1"># Create symbol &lt;-&gt; from minimum to maximum value of the graph (between first and second models)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-                    <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">counts</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span>
-                    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">counts</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span>
-                    <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;&lt;-&gt;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">))</span>
-        <span class="c1"># Texts &quot;Difference&quot;</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">first_y_pos</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Difference: </span><span class="si">{</span><span class="n">first_gap</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
-        
-        <span class="c1"># Only in the case where you are interested in comparing the performance of three models</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_to_train</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="c1"># Horizontal dashed lines at bar levels, compute gap and set y position to locate the texts &quot;Difference&quot;</span>
-            <span class="n">second_gap</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">counts</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-            <span class="n">second_y_pos</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.02</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">1.4</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.4</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">)</span>
-            <span class="c1"># Create symbol &lt;-&gt; from minimum to maximum value of the graph (between second and third models)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-                        <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">1.4</span><span class="p">,</span> <span class="n">counts</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span>
-                        <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">counts</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span>
-                        <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;&lt;-&gt;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">))</span>
-            <span class="c1"># Texts &quot;Difference&quot;</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">second_y_pos</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Difference: </span><span class="si">{</span><span class="n">second_gap</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+    <span class="c1"># For deep learning model</span>
+    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">metric_plotted</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">metrics</span><span class="p">[</span><span class="n">element</span><span class="p">]</span> <span class="k">for</span> <span class="n">metrics</span> <span class="ow">in</span> <span class="n">training_metrics</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Training&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">metrics</span><span class="p">[</span><span class="n">element</span><span class="p">]</span> <span class="k">for</span> <span class="n">metrics</span> <span class="ow">in</span> <span class="n">validation_metrics</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Validation&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Graph of &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; per epoch for ResNet model:&quot;</span><span class="p">)</span>
         <span class="c1"># Improves graph visibility</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-        <span class="c1"># Save the graph to a specific path</span>
-        <span class="k">if</span> <span class="n">test</span><span class="p">:</span>
-            <span class="n">save_graph</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;Compare of &#39;</span> <span class="o">+</span> <span class="n">metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="s1">&#39;Testing result&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">save_graph</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;Compare of &#39;</span> <span class="o">+</span> <span class="n">metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="s1">&#39;Compare performance&#39;</span><span class="p">)</span>
+        <span class="n">save_graph</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;Graph of &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="p">)),</span> <span class="s2">&quot;ResNet model&quot;</span><span class="p">)</span>
         <span class="c1"># Check if your configuration likes a print or not</span>
         <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -342,16 +202,50 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
+<span class="c1"># Create the graph for test performance metrics</span>
+<div class="viewcode-block" id="print_test_metrics_graph">
+<a class="viewcode-back" href="../utils.html#utils.print_test_metrics_graph">[docs]</a>
+<span class="k">def</span> <span class="nf">print_test_metrics_graph</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">metric_plotted</span><span class="p">,</span> <span class="n">view</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints the graph of a given metric for the testing datasets.</span>
+
+<span class="sd">    :param metrics_list: The metrics.</span>
+<span class="sd">    :type metrics_list: List</span>
+<span class="sd">    :param metric_plotted: The metric to be plotted.</span>
+<span class="sd">    :type metric_plotted: String</span>
+<span class="sd">    :param view: Whether to display the plot.</span>
+<span class="sd">    :type view: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Print the graph for test for each performance metric</span>
+    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">metric_plotted</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">metrics</span><span class="p">[</span><span class="n">element</span><span class="p">]</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">element</span><span class="o">.</span><span class="n">capitalize</span><span class="p">())</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Graph of </span><span class="si">{</span><span class="n">element</span><span class="si">}</span><span class="s2"> for ResNet model&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="o">*</span><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+        <span class="c1"># Save the graph</span>
+        <span class="n">save_graph</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Graph of </span><span class="si">{</span><span class="n">element</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s2">&quot;Testing result&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
 <span class="c1"># Save the created graph</span>
 <div class="viewcode-block" id="save_graph">
 <a class="viewcode-back" href="../utils.html#utils.save_graph">[docs]</a>
-<span class="k">def</span> <span class="nf">save_graph</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">type_of_graph</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">save_graph</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Saves a graph to a file.</span>
 
 <span class="sd">    :param filename: The name of the file to save the graph to.</span>
 <span class="sd">    :type filename: String</span>
-<span class="sd">    :param type_of_graph: The type of the graph (e.g., &#39;Testing result&#39;, &#39;Compare performance&#39;).</span>
+<span class="sd">    :param type_of_graph: The type of the graph (e.g. &#39;Dataset&#39;, &#39;ResNet model&#39;, &#39;Testing result&#39;).</span>
 <span class="sd">    :type type_of_graph: String</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -361,16 +255,16 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;graph&#39;</span><span class="p">)):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;graph&#39;</span><span class="p">))</span>
     <span class="c1"># Check if the type_of_graph subfolder exists, if not, create it</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//graph&#39;</span><span class="p">),</span> <span class="n">type_of_graph</span><span class="p">)):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//graph&#39;</span><span class="p">),</span> <span class="n">type_of_graph</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//graph&#39;</span><span class="p">),</span> <span class="n">directory</span><span class="p">)):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//graph&#39;</span><span class="p">),</span> <span class="n">directory</span><span class="p">))</span>
     <span class="c1"># Save the graph</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//graph//&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">type_of_graph</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">))</span></div>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//graph//&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">))</span></div>
 
 
 <span class="c1"># Create a graph for the confusion matrix</span>
 <div class="viewcode-block" id="print_confusion_matrix_graph">
 <a class="viewcode-back" href="../utils.html#utils.print_confusion_matrix_graph">[docs]</a>
-<span class="k">def</span> <span class="nf">print_confusion_matrix_graph</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">type_model</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">print_confusion_matrix_graph</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Prints a confusion matrix graph for a model.</span>
 
@@ -378,8 +272,6 @@
 <span class="sd">    :type conf_matrix: numpy.ndarray</span>
 <span class="sd">    :param view: Whether to display the plot.</span>
 <span class="sd">    :type view: bool</span>
-<span class="sd">    :param type_model: The type of the model (e.g., &#39;ResNet&#39;, &#39;CNN&#39;, &#39;SVM&#39;).</span>
-<span class="sd">    :type type_model: String</span>
 <span class="sd">    :param test: Whether the model is in the testing phase.</span>
 <span class="sd">    :type test: Bool</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -391,13 +283,15 @@
     <span class="c1"># Set labels</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Predicted&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Truth&#39;</span><span class="p">)</span>
+    <span class="c1"># Set title</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Heatmap of confusion matrix for ResNet model&quot;</span><span class="p">)</span>
     <span class="c1"># Improves graph visibility</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
     <span class="c1"># Save the graph to a specific path</span>
     <span class="k">if</span> <span class="n">test</span><span class="p">:</span>
-        <span class="n">save_graph</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">type_model</span><span class="p">)</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; model</span><span class="se">\&#39;</span><span class="s1">s heatmap&#39;</span><span class="p">),</span> <span class="s1">&#39;Testing result&#39;</span><span class="p">)</span>
+        <span class="n">save_graph</span><span class="p">(</span><span class="s2">&quot;ResNet model</span><span class="se">\&#39;</span><span class="s2">s heatmap&quot;</span><span class="p">,</span> <span class="s1">&#39;Testing result&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">save_graph</span><span class="p">(</span><span class="s1">&#39;Heatmap of confusion matrix&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">type_model</span><span class="p">)</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; model&#39;</span><span class="p">))</span>
+        <span class="n">save_graph</span><span class="p">(</span><span class="s1">&#39;Heatmap of confusion matrix&#39;</span><span class="p">,</span> <span class="s2">&quot;ResNet model&quot;</span><span class="p">)</span>
     <span class="c1"># Check if your configuration likes a print or not</span>
     <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -408,42 +302,36 @@
 <span class="c1"># Print confusion matrix on the screen</span>
 <div class="viewcode-block" id="print_confusion_matrix">
 <a class="viewcode-back" href="../utils.html#utils.print_confusion_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">print_confusion_matrix</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">,</span> <span class="n">type_model</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">print_confusion_matrix</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">,</span> <span class="n">class_names</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prints a confusion matrix for a model.</span>
+<span class="sd">    Prints a confusion matrix for the model.</span>
 
 <span class="sd">    :param conf_matrix: The confusion matrix to print.</span>
 <span class="sd">    :type conf_matrix: Numpy.ndarray</span>
-<span class="sd">    :param type_model: The type of the model (e.g., &#39;ResNet&#39;, &#39;CNN&#39;, &#39;SVM&#39;).</span>
-<span class="sd">    :type type_model: String</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Confusion matrix for &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">type_model</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; model:&quot;</span><span class="p">)</span>
-    <span class="c1"># Based on the type of classification [binary or ternary], set the labels</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ACCIDENTAL WHORL&#39;</span><span class="p">,</span> <span class="s1">&#39;CENTRAL POCKET LOOP WHORL&#39;</span><span class="p">,</span> <span class="s1">&#39;DOUBLE LOOP WHORL&#39;</span><span class="p">,</span> <span class="s1">&#39;PLAIN ARCH&#39;</span><span class="p">,</span> <span class="s1">&#39;PLAIN WHORL&#39;</span><span class="p">,</span> <span class="s1">&#39;RADIAL LOOP&#39;</span><span class="p">,</span> <span class="s1">&#39;TENDED ARCH&#39;</span><span class="p">,</span> <span class="s1">&#39;ULNAR LOOP&#39;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Confusion matrix for ResNet model:&quot;</span><span class="p">)</span>
     <span class="c1"># Print the confusion matrix with DataFrame</span>
-    <span class="n">df_confusion_matrix</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+    <span class="n">df_confusion_matrix</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">class_names</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">class_names</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">df_confusion_matrix</span><span class="p">)</span></div>
 
 
 <span class="c1"># Prints the best evaluation metrics found during the evaluation phase</span>
 <div class="viewcode-block" id="print_best_val_metrics">
 <a class="viewcode-back" href="../utils.html#utils.print_best_val_metrics">[docs]</a>
-<span class="k">def</span> <span class="nf">print_best_val_metrics</span><span class="p">(</span><span class="n">type_model</span><span class="p">,</span> <span class="n">best_val_metric</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">print_best_val_metrics</span><span class="p">(</span><span class="n">best_val_metric</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Prints the best model performance on the validation dataset.</span>
 
-<span class="sd">    :param type_model: The type of the model.</span>
-<span class="sd">    :type type_model: String</span>
 <span class="sd">    :param best_val_metric: The best validation metrics.</span>
 <span class="sd">    :type best_val_metric: Dictionary</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best &quot;</span> <span class="o">+</span> <span class="n">type_model</span> <span class="o">+</span> <span class="s2">&quot; model performance on validation dataset:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best ResNet model performance on validation dataset:&quot;</span><span class="p">)</span>
     <span class="c1"># Print the performance of the best model based on the validation_dataset on which the test_dataset will be tested</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">best_val_metric</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Best &quot;</span> <span class="o">+</span> <span class="n">type_model</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; model </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing &quot;</span> <span class="o">+</span> <span class="n">type_model</span> <span class="o">+</span> <span class="s2">&quot; model on test dataset...&quot;</span><span class="p">)</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Best ResNet model </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing ResNet model on test dataset...&quot;</span><span class="p">)</span></div>
 
 
 <span class="c1"># Print the result of the evaluation</span>
@@ -464,111 +352,7 @@
     <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Test accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;Test precision&#39;</span><span class="p">,</span> <span class="s1">&#39;Test recall&#39;</span><span class="p">,</span> <span class="s1">&#39;Test f1 score&#39;</span><span class="p">,</span> <span class="s1">&#39;Test loss&#39;</span><span class="p">]</span>
     <span class="c1"># Print performance on the test_dataset</span>
     <span class="n">test_result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">test_result</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">metrics</span></div>
-
-
-<span class="c1"># Print scree graph after PCA on dataset features</span>
-<div class="viewcode-block" id="print_scree_graph">
-<a class="viewcode-back" href="../utils.html#utils.print_scree_graph">[docs]</a>
-<span class="k">def</span> <span class="nf">print_scree_graph</span><span class="p">(</span><span class="n">pca</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">view</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prints the scree graph of the PCA.</span>
-
-<span class="sd">    :param pca: The PCA object.</span>
-<span class="sd">    :type pca: PCA</span>
-<span class="sd">    :param test: Whether it&#39;s a test or not.</span>
-<span class="sd">    :type test: Bool</span>
-<span class="sd">    :param view: Whether to view the graph or not.</span>
-<span class="sd">    :type view: Bool</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Get the percentage value of the variance</span>
-    <span class="n">explained_variance_ratio</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
-    <span class="c1"># Plot values on bars</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">explained_variance_ratio</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">explained_variance_ratio</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Eigenvalues of the principal components&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
-    <span class="c1"># Set labels and legend</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Variance explained (%)&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Principal components&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
-    <span class="c1"># Improves graph visibility</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="c1"># Check the path where to save the graph</span>
-    <span class="k">if</span> <span class="n">test</span><span class="p">:</span>
-        <span class="n">save_graph</span><span class="p">(</span><span class="s1">&#39;PCA scree graph&#39;</span><span class="p">,</span> <span class="s1">&#39;Testing result&#39;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">save_graph</span><span class="p">(</span><span class="s1">&#39;PCA scree graph&#39;</span><span class="p">,</span> <span class="s1">&#39;SVM model&#39;</span><span class="p">)</span>
-    <span class="c1"># Check if your configuration likes a print or not</span>
-    <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-    <span class="c1"># Close the graph to avoid overlap</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
-
-
-<span class="c1"># Extracts metric values from the dictionary</span>
-<div class="viewcode-block" id="extract_value">
-<a class="viewcode-back" href="../utils.html#utils.extract_value">[docs]</a>
-<span class="k">def</span> <span class="nf">extract_value</span><span class="p">(</span><span class="n">metrics</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Extracts the values from the metrics.</span>
-
-<span class="sd">    :param metrics: The metrics to extract values from.</span>
-<span class="sd">    :type metrics: dict</span>
-<span class="sd">    :return: Returns a list of the extracted values.</span>
-<span class="sd">    :rtype: list</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Initialize an array</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="c1"># Iterates through dictionary values and adds them to the list</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    <span class="c1"># Return the list</span>
-    <span class="k">return</span> <span class="n">values</span></div>
-
-
-<span class="c1"># Extract the names of the models from their paths</span>
-<div class="viewcode-block" id="get_name">
-<a class="viewcode-back" href="../utils.html#utils.get_name">[docs]</a>
-<span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="n">saved_models_path</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function extracts the names of the models from their saved file paths.</span>
-
-<span class="sd">    :param saved_models_path: A list of file paths where the models are saved.</span>
-<span class="sd">    :type saved_models_path: list</span>
-<span class="sd">    :return: Returns a list of model names based on the file paths.</span>
-<span class="sd">    :rtype: list</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="n">name</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">saved_models_path</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;svm&quot;</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-            <span class="n">name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;SVM&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="s2">&quot;resnet&quot;</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-            <span class="n">name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ResNet&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="s2">&quot;cnn&quot;</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-            <span class="n">name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;CNN&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">name</span></div>
-
-
-<span class="c1"># Extract a list of metrics from a list of dictionaries</span>
-<div class="viewcode-block" id="extract_list_of_metrics">
-<a class="viewcode-back" href="../utils.html#utils.extract_list_of_metrics">[docs]</a>
-<span class="k">def</span> <span class="nf">extract_list_of_metrics</span><span class="p">(</span><span class="n">list_of_dictionary</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function extracts a list of metrics from a list of dictionaries.</span>
-
-<span class="sd">    :param list_of_dictionary: A list of dictionaries containing metrics.</span>
-<span class="sd">    :type list_of_dictionary: list</span>
-<span class="sd">    :return: Returns a list of metrics extracted from the dictionaries.</span>
-<span class="sd">    :rtype: list</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="n">list_of_metrics</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">dictionary</span> <span class="ow">in</span> <span class="n">list_of_dictionary</span><span class="p">:</span>
-        <span class="n">list_of_metrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">extract_value</span><span class="p">(</span><span class="n">dictionary</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">list_of_metrics</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="n">test_result</span><span class="p">)</span></div>
 
 </pre></div>
 
@@ -579,7 +363,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Giuseppe Lorenzo Di Prima.</p>
+    <p>&#169; Copyright 2025, Giuseppe Lorenzo Di Prima.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -4,7 +4,6 @@
 # Third-party imports
 import torch
 import shutil
-from joblib import load
 from PIL import Image
 import os
 from torchvision import transforms
@@ -12,16 +11,10 @@ from torch.utils.data import Dataset
 
 # Local application/library specific imports
 from model_classes.resnet_model import ResNet, ResidualBlock
-from model_classes.CNN_model import CNN
-from extract_representations.vision_embeddings import VisionEmbeddings
-from sklearn import svm
 
 # Configuration and utility imports
 from yaml_config_override import add_arguments
 from addict import Dict
-
-# Define classes
-class_names = ['Accidental Whorl', 'Central Pocket Loop Whorl', 'Double Loop Whorl', 'Plain Arch', 'Plain Whorl', 'Radial Loop', 'Tended Arch', 'Ulnar Loop']
 
 # Transformation to apply to the dataset
 transform = transforms.Compose([
@@ -69,84 +62,12 @@ class PolyU_HRF_DBII(Dataset):
             }
         return item
 
-# Classify with machine learning model
-def classify_ml_model(model_name, config, dataset):
-    """
-    This function classifies with a machine learning model on the created dataset.
 
-    :param model_name: The name of the machine learning model to use (e.g. 'SVM').
-    :type model_name: str
-    :param config: The configuration settings for the model.
-    :type config: object
-    :param dataset: The dataset used for classification.
-    :type dataset: torch.utils.data.Dataset
+# Classify with ResNet model
+def classify(config, device, dataset):
     """
-    
-    # ---------------------
-    # 1. Compute dataset for svm
-    # ---------------------
-    
-    print("Vision embeddings for SVM:\n")
-    # Load the pca object determined during the training phase
-    pca = load(f"{config.training.checkpoint_dir}/pca.joblib")
-    # Create vision_embedding object
-    vision_embeddings = VisionEmbeddings()
-    # Create the dataset containing features for the svm model
-    dataset_svm = vision_embeddings.extract_single_dataset(dataset, pca, 'classification', False, False)
-    print("---------------------")
-    
-    # ---------------------
-    # 2. Load model
-    # ---------------------
-    
-    # Load the templates and specify their configuration through the config variable
-    # SVM model
-    svm_model = svm.SVC(
-        gamma=config.svm_training.gamma,
-        kernel=config.svm_training.kernel,
-        C=config.svm_training.C,
-        probability=config.svm_training.probability
-    )
-    
-    # ---------------------
-    # 3. Load model weights
-    # ---------------------
-    
-    # Loads the saved model weights to the specified folder during training
-    print("Loading " + model_name + " model...")
-    # SVM model
-    svm_model = load(f"{config.training.checkpoint_dir}/{model_name}_best_model.pkl")
-    print("-> " + model_name + " model loaded.")
-    print("---------------------")
-    print("Using " + model_name + " model for classification:")
-    
-    # ---------------------
-    # 4. Classify
-    # ---------------------
-    
-    # Classify and move image to corresponding sub-folder
-    for features, img_paths in zip(dataset_svm.features, dataset_svm.path):
-        # Compute corresponding class
-        pred = svm_model.predict([features])[0]
-        class_name = class_names[pred]
-        
-        # Select/cresate sub-folder
-        class_folder = os.path.join(config.classification.output_folder, class_name)
-        os.makedirs(class_folder, exist_ok=True)
-        
-        # Move image to corrisponding folder
-        shutil.move(img_paths, os.path.join(class_folder, os.path.basename(img_paths)))
-        
-        # Print result
-        print(f"Image {os.path.basename(img_paths)} classified as: {class_name}.")
+    This function classifies with a ResNet model on the created dataset.
 
-# Classify with deep learning model
-def classify_dl_model(model_name, config, device, dataset):
-    """
-    This function classifies with a deep learning model on the created dataset.
-
-    :param model_name: The name of the deep learning model to use (e.g. 'ResNet' or 'CNN').
-    :type model_name: str
     :param config: The configuration settings for the model.
     :type config: object
     :param device: The device on which to compute classification (e.g. 'cpu' or 'cuda').
@@ -170,45 +91,31 @@ def classify_dl_model(model_name, config, device, dataset):
     # 2. Load model
     # ---------------------
     
-    # Load the templates and specify their configuration through the config variable
-    if 'resnet' in model_name.lower():
-        # ResNet Model
-        model = ResNet(
-            ResidualBlock,
-            config.ResNet_model.layers,
-            config.classification.number_of_classes,
-            config.ResNet_model.stride,
-            config.ResNet_model.padding,
-            config.ResNet_model.kernel,
-            config.ResNet_model.channels_of_color,
-            config.ResNet_model.planes,
-            config.ResNet_model.in_features,
-            config.ResNet_model.inplanes
-        )
-        model.to(device)
-    
-    # CNN Model
-    else:
-        model = CNN(
-            config.classification.number_of_classes,
-            config.CNN_model.stride,
-            config.CNN_model.padding,
-            config.CNN_model.kernel,
-            config.CNN_model.channels_of_color,
-            config.CNN_model.inplace,
-        )
-        model.to(device)
+    # Load ResNet model and specify its configuration through the config variable
+    model = ResNet(
+        ResidualBlock,
+        config.ResNet_model.layers,
+        config.classification.number_of_classes,
+        config.ResNet_model.stride,
+        config.ResNet_model.padding,
+        config.ResNet_model.kernel,
+        config.ResNet_model.channels_of_color,
+        config.ResNet_model.planes,
+        config.ResNet_model.in_features,
+        config.ResNet_model.inplanes
+    )
+    model.to(device)
 
     # ---------------------
     # 3. Load model weights
     # ---------------------
     
     # Loads the saved model weights to the specified folder during training
-    print("Loading " + model_name + " model...")
-    model.load_state_dict(torch.load(f"{config.training.checkpoint_dir}/{model_name}_best_model.pt"))
-    print("-> " + model_name + " model loaded.")
+    print("Loading ResNet model...")
+    model.load_state_dict(torch.load(f"{config.training.checkpoint_dir}/ResNet_best_model.pt"))
+    print("-> ResNet model loaded.")
     print("---------------------")
-    print("Using " + model_name + " model for classification:")
+    print("Using ResNet model for classification:")
     
     # ---------------------
     # 4. Classify
@@ -231,7 +138,7 @@ def classify_dl_model(model_name, config, device, dataset):
 
             # Select/cresate sub-folder
             for img_path, pred in zip(img_paths, preds):
-                class_name = class_names[pred]
+                class_name = config.classification.class_names[pred]
                 class_folder = os.path.join(config.classification.output_folder, class_name)
                 os.makedirs(class_folder, exist_ok=True)
 
@@ -245,15 +152,15 @@ def classify_dl_model(model_name, config, device, dataset):
 # Main
 if __name__ == '__main__':
     """
-    The main script for classifing fingerprints.
+    The main script to classify fingerprints.
 
     The script performs the following steps:
     
     1. Load configuration
     2. Set device
     3. Load data
-    4. Get saved model name
-    5. Classify on saved models and move classified fingerpints  
+    4. Verify the presence of saved model
+    5. Classify on saved model and move classified fingerpints  
     """
     
     # ---------------------
@@ -284,7 +191,7 @@ if __name__ == '__main__':
     path = os.getcwd()
     if not os.path.exists(os.path.join(path + "/", config.classification.image_folder)):
         os.makedirs(os.path.join(path + "/", config.classification.image_folder))
-        raise Exception("Error no \"Fingerprint_to_classify\" found. It has been created right now. Please insert image you want to classify.")
+        raise Exception("Error no \"Fingerprint_to_classify\" directory found. It has been created right now. Please insert there image you want to classify.")
     if not os.path.exists(os.path.join(path + "/", config.classification.output_folder)):
         os.makedirs(os.path.join(path + "/", config.classification.output_folder))
 
@@ -292,38 +199,23 @@ if __name__ == '__main__':
     dataset = PolyU_HRF_DBII(config.classification.image_folder, transform)
 
     # ---------------------
-    # 4. Get saved model name
+    # 4. Verify the presence of saved model
     # ---------------------
     
+    # No checkpoints directory
     if not os.path.exists(os.path.join(path + "/", config.training.checkpoint_dir)):
         os.makedirs(os.path.join(path + "/", config.training.checkpoint_dir))
-    # Get path of saved models
-    saved_models_path = os.listdir(os.path.join(path + "/", config.training.checkpoint_dir))
-    saved_models = [path.lower() for path in saved_models_path]
+        raise Exception("Error no checkpoints directory. It has been created right now.")
+    
+    # No ResNet_best_model.pt
+    if not os.path.isfile(path + "/" + config.training.checkpoint_dir + "/ResNet_best_model.pt"):
+        raise Exception("Error no saved model.")
 
     # ---------------------
-    # 5. Classify on saved models
+    # 5. Classify on saved model
     # ---------------------
 
-    # Based on performance: ResNet >> CNN >> SVM
-
-    # ResNet
-    if 'resnet_best_model.pt' in saved_models:
-        model = torch.load(config.training.checkpoint_dir + "ResNet_best_model.pt")
-        classify_dl_model("ResNet", config, device, dataset)
-    
-    # CNN
-    elif 'cnn_best_model.pt' in saved_models:
-        model = torch.load(config.training.checkpoint_dir + "CNN_best_model.pt")
-        classify_dl_model("CNN", config, device, dataset)
-    
-    # SVM
-    elif 'svm_best_model.pkl' in saved_models:
-        model = load(config.training.checkpoint_dir + "SVM_best_model.pkl")
-        classify_ml_model("SVM", config, dataset)
-    
-    # No model saved
-    else:
-        raise Exception("Error no model saved.")
+    # Classify with ResNet model
+    classify(config, device, dataset)
 
     print("\nClassification finish correctly.\n")

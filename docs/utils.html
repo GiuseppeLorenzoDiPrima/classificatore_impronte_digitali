@@ -20,7 +20,8 @@
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="train module" href="train.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,27 +43,30 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">utils module</a><ul>
-<li><a class="reference internal" href="#utils.compare_performance"><code class="docutils literal notranslate"><span class="pre">compare_performance()</span></code></a></li>
-<li><a class="reference internal" href="#utils.compute_metrics"><code class="docutils literal notranslate"><span class="pre">compute_metrics()</span></code></a></li>
-<li><a class="reference internal" href="#utils.evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate()</span></code></a></li>
-<li><a class="reference internal" href="#utils.extract_list_of_metrics"><code class="docutils literal notranslate"><span class="pre">extract_list_of_metrics()</span></code></a></li>
-<li><a class="reference internal" href="#utils.extract_value"><code class="docutils literal notranslate"><span class="pre">extract_value()</span></code></a></li>
-<li><a class="reference internal" href="#utils.get_name"><code class="docutils literal notranslate"><span class="pre">get_name()</span></code></a></li>
-<li><a class="reference internal" href="#utils.print_best_val_metrics"><code class="docutils literal notranslate"><span class="pre">print_best_val_metrics()</span></code></a></li>
-<li><a class="reference internal" href="#utils.print_compare_graph"><code class="docutils literal notranslate"><span class="pre">print_compare_graph()</span></code></a></li>
-<li><a class="reference internal" href="#utils.print_confusion_matrix"><code class="docutils literal notranslate"><span class="pre">print_confusion_matrix()</span></code></a></li>
-<li><a class="reference internal" href="#utils.print_confusion_matrix_graph"><code class="docutils literal notranslate"><span class="pre">print_confusion_matrix_graph()</span></code></a></li>
-<li><a class="reference internal" href="#utils.print_evaluation"><code class="docutils literal notranslate"><span class="pre">print_evaluation()</span></code></a></li>
-<li><a class="reference internal" href="#utils.print_metrics_graph"><code class="docutils literal notranslate"><span class="pre">print_metrics_graph()</span></code></a></li>
-<li><a class="reference internal" href="#utils.print_scree_graph"><code class="docutils literal notranslate"><span class="pre">print_scree_graph()</span></code></a></li>
-<li><a class="reference internal" href="#utils.save_graph"><code class="docutils literal notranslate"><span class="pre">save_graph()</span></code></a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Progetto esame</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="classify.html">classify module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_classes.html">data_classes package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_classes.html">model_classes package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="train.html">train module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#utils.compute_metrics"><code class="docutils literal notranslate"><span class="pre">compute_metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils.evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils.print_best_val_metrics"><code class="docutils literal notranslate"><span class="pre">print_best_val_metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils.print_confusion_matrix"><code class="docutils literal notranslate"><span class="pre">print_confusion_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils.print_confusion_matrix_graph"><code class="docutils literal notranslate"><span class="pre">print_confusion_matrix_graph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils.print_evaluation"><code class="docutils literal notranslate"><span class="pre">print_evaluation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils.print_metrics_graph"><code class="docutils literal notranslate"><span class="pre">print_metrics_graph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils.print_test_metrics_graph"><code class="docutils literal notranslate"><span class="pre">print_test_metrics_graph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils.save_graph"><code class="docutils literal notranslate"><span class="pre">save_graph()</span></code></a></li>
 </ul>
 </li>
 </ul>
-</div>
+</li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -77,6 +81,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Progetto esame</a></li>
       <li class="breadcrumb-item active">utils module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/utils.rst.txt" rel="nofollow"> View page source</a>
@@ -89,23 +94,6 @@
              
   <section id="module-utils">
 <span id="utils-module"></span><h1>utils module<a class="headerlink" href="#module-utils" title="Link to this heading"></a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="utils.compare_performance">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">compare_performance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_to_train</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#compare_performance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.compare_performance" title="Link to this definition"></a></dt>
-<dd><p>This function compares the performance metrics between multiple models.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>metrics_list</strong> (<em>list</em>) – A list of performance metrics for each model.</p></li>
-<li><p><strong>model_to_train</strong> (<em>list</em>) – A list of model names that were trained.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.compute_metrics">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">compute_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">references</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#compute_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.compute_metrics" title="Link to this definition"></a></dt>
@@ -149,113 +137,36 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utils.extract_list_of_metrics">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">extract_list_of_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_of_dictionary</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#extract_list_of_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.extract_list_of_metrics" title="Link to this definition"></a></dt>
-<dd><p>This function extracts a list of metrics from a list of dictionaries.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>list_of_dictionary</strong> (<em>list</em>) – A list of dictionaries containing metrics.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Returns a list of metrics extracted from the dictionaries.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="utils.extract_value">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">extract_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#extract_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.extract_value" title="Link to this definition"></a></dt>
-<dd><p>Extracts the values from the metrics.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>metrics</strong> (<em>dict</em>) – The metrics to extract values from.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Returns a list of the extracted values.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="utils.get_name">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">saved_models_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.get_name" title="Link to this definition"></a></dt>
-<dd><p>This function extracts the names of the models from their saved file paths.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>saved_models_path</strong> (<em>list</em>) – A list of file paths where the models are saved.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Returns a list of model names based on the file paths.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="utils.print_best_val_metrics">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_best_val_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_val_metric</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_best_val_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_best_val_metrics" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_best_val_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">best_val_metric</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_best_val_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_best_val_metrics" title="Link to this definition"></a></dt>
 <dd><p>Prints the best model performance on the validation dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>type_model</strong> (<em>String</em>) – The type of the model.</p></li>
-<li><p><strong>best_val_metric</strong> (<em>Dictionary</em>) – The best validation metrics.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="utils.print_compare_graph">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_compare_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_to_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_compare_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_compare_graph" title="Link to this definition"></a></dt>
-<dd><p>This function creates graphs to compare the performance of multiple models.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>metrics_list</strong> (<em>list</em>) – A list of performance metrics for each model.</p></li>
-<li><p><strong>model_to_train</strong> (<em>list</em>) – A list of model names that were trained.</p></li>
-<li><p><strong>view</strong> (<em>bool</em>) – A boolean indicating whether to display the graphs.</p></li>
-<li><p><strong>test</strong> (<em>bool</em>) – A boolean indicating whether the graphs are for testing results.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
+<dd class="field-odd"><p><strong>best_val_metric</strong> (<em>Dictionary</em>) – The best validation metrics.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.print_confusion_matrix">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_confusion_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_confusion_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_confusion_matrix" title="Link to this definition"></a></dt>
-<dd><p>Prints a confusion matrix for a model.</p>
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_confusion_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_confusion_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_confusion_matrix" title="Link to this definition"></a></dt>
+<dd><p>Prints a confusion matrix for the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>conf_matrix</strong> (<em>Numpy.ndarray</em>) – The confusion matrix to print.</p></li>
-<li><p><strong>type_model</strong> (<em>String</em>) – The type of the model (e.g., ‘ResNet’, ‘CNN’, ‘SVM’).</p></li>
-</ul>
+<dd class="field-odd"><p><strong>conf_matrix</strong> (<em>Numpy.ndarray</em>) – The confusion matrix to print.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.print_confusion_matrix_graph">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_confusion_matrix_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_confusion_matrix_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_confusion_matrix_graph" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_confusion_matrix_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_confusion_matrix_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_confusion_matrix_graph" title="Link to this definition"></a></dt>
 <dd><p>Prints a confusion matrix graph for a model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>conf_matrix</strong> (<em>numpy.ndarray</em>) – The confusion matrix to plot.</p></li>
 <li><p><strong>view</strong> (<em>bool</em>) – Whether to display the plot.</p></li>
-<li><p><strong>type_model</strong> (<em>String</em>) – The type of the model (e.g., ‘ResNet’, ‘CNN’, ‘SVM’).</p></li>
 <li><p><strong>test</strong> (<em>Bool</em>) – Whether the model is in the testing phase.</p></li>
 </ul>
 </dd>
@@ -281,7 +192,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.print_metrics_graph">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_metrics_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_metrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_metrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_plotted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_metrics_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_metrics_graph" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_metrics_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_metrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_metrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_plotted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_metrics_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_metrics_graph" title="Link to this definition"></a></dt>
 <dd><p>Prints the graph of a given metric for the training and validation datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -290,22 +201,21 @@
 <li><p><strong>validation_metrics</strong> (<em>List</em>) – The validation metrics.</p></li>
 <li><p><strong>metric_plotted</strong> (<em>String</em>) – The metric to be plotted.</p></li>
 <li><p><strong>view</strong> (<em>bool</em>) – Whether to display the plot.</p></li>
-<li><p><strong>type_model</strong> (<em>String</em>) – The type of the model (e.g., ‘ResNet’, ‘CNN’, ‘SVM’).</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utils.print_scree_graph">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_scree_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pca</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_scree_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_scree_graph" title="Link to this definition"></a></dt>
-<dd><p>Prints the scree graph of the PCA.</p>
+<dt class="sig sig-object py" id="utils.print_test_metrics_graph">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_test_metrics_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_plotted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#print_test_metrics_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.print_test_metrics_graph" title="Link to this definition"></a></dt>
+<dd><p>Prints the graph of a given metric for the testing datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pca</strong> (<em>PCA</em>) – The PCA object.</p></li>
-<li><p><strong>test</strong> (<em>Bool</em>) – Whether it’s a test or not.</p></li>
-<li><p><strong>view</strong> (<em>Bool</em>) – Whether to view the graph or not.</p></li>
+<li><p><strong>metrics_list</strong> (<em>List</em>) – The metrics.</p></li>
+<li><p><strong>metric_plotted</strong> (<em>String</em>) – The metric to be plotted.</p></li>
+<li><p><strong>view</strong> (<em>bool</em>) – Whether to display the plot.</p></li>
 </ul>
 </dd>
 </dl>
@@ -313,13 +223,13 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.save_graph">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">save_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_of_graph</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#save_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.save_graph" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">save_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#save_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.save_graph" title="Link to this definition"></a></dt>
 <dd><p>Saves a graph to a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>String</em>) – The name of the file to save the graph to.</p></li>
-<li><p><strong>type_of_graph</strong> (<em>String</em>) – The type of the graph (e.g., ‘Testing result’, ‘Compare performance’).</p></li>
+<li><p><strong>type_of_graph</strong> (<em>String</em>) – The type of the graph (e.g. ‘Dataset’, ‘ResNet model’, ‘Testing result’).</p></li>
 </ul>
 </dd>
 </dl>
@@ -330,12 +240,14 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="train.html" class="btn btn-neutral float-left" title="train module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Giuseppe Lorenzo Di Prima.</p>
+    <p>&#169; Copyright 2025, Giuseppe Lorenzo Di Prima.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -28,26 +28,26 @@ This is a guide to assist in reading the “PolyU HRF DBII” project related to
 
 ### Introduction
 
-The objective of this project is to develop an automatic fingerprint classification system into 8 classes: Plain Arch, Tented Arch, Ulnar Loop, Radial Loop, Double Loop Whorl, Plain Whorl, Central Pocket Loop Whorl and Accidental Whorl. To achieve this goal, multiple proposals have been made, using advanced deep learning and machine learning techniques. For training the model, the HRF DBII dataset provided by the Hong Kong Polytechnic University was used.
+The objective of this project is to develop an automatic fingerprint classification system into 8 classes: Plain Arch, Tented Arch, Ulnar Loop, Radial Loop, Double Loop Whorl, Plain Whorl, Central Pocket Loop Whorl and Accidental Whorl. To achieve this goal, a proposal using advanced deep learning techniques has been made. For training the model, the HRF DBII dataset provided by the Hong Kong Polytechnic University was used.
 
 PolyU HRF DBII consists of a small high resolution fingerprint (HRF) dataset. The images of the same finger were collected in two sessions separated by about two weeks. Each image is named as “ID_S_X”, where “ID” represents the identity of the person, “S” represents the session of the captured image and “X” represents the image number of each session. DBII contains 1.480 images from 148 fingers.
 
 To ensure that the performance during the testing phase was as objective as possible, after classifying the images into the 8 classes, they were divided by user, ensuring that only fingerprints from users not used during the training phase were used during testing.
 
-In terms of networks, within deep learning, a residual convolutional neural network (ResNet) and a convolutional neural network were used, while in the field of machine learning, the well-known SVM algorithm was used. The performance of the networks may vary between training sessions due to random initialization.
+In terms of model, a residual convolutional neural network (ResNet) was used. The performance of the model may vary between training sessions due to random initialization.
 
 Before you can proceed with the classification of fingerprints, it is necessary to train the neural network. Two scripts are provided for this purpose:
-- `train.py` for training the models.
-- `test.py` for testing the models.
+- `train.py` for training the model.
+- `test.py` for testing the model.
 
-The dataset is managed by the `manage_dataset.py` class, while the two custom models are defined in the `resnet_model.py` and `CNN_model.py`. A standard machine learning model, specifically the `SVM`, is also used.
+The dataset is managed by the `manage_dataset.py` class, while the custom model is defined in the `resnet_model.py`.
 
 > [!IMPORTANT]  
 > To reproduce the project, you need to run the following commands to include the configuration file:
 >
 >\>>> python -u train.py -c config/base_config.yaml
 >
-> Replace "train.py" with "test.py" to evaluate performance on the test dataset after training the models
+> Replace "train.py" with "test.py" to evaluate performance on the test dataset after training the model
 
 The main idea is that, the project can be reproduced by running the following commands:
 
@@ -62,7 +62,7 @@ python test.py
 > [!CAUTION]
 >  You must have a version of git installed that is compatible with your operating system to perform the git clone operation.
 
-After training and testing the neural networks, you can proceed with the automatic classification of images. Within the repository, there is a folder named `Fingerprint_to_classify`. Simply move the images you want to classify into this folder and execute the command:
+After training and testing the neural network, you can proceed with the automatic classification of images. Within the repository, there is a folder named `Fingerprint_to_classify`. Simply move the images you want to classify into this folder and execute the command:
 
 ```bash
 python classify.py
@@ -85,15 +85,11 @@ This project is based on the following libraries:
 - `addict` for configuration management.
 - `tqdm` for progress bars.
 - `scikit-learn` as a newer version of sklearn
-- `sklearn` for machine learning algorithms
 - `numpy` for numerical computing
 - `matplotlib` for data visualization
 - `pandas` for data manipulation
 - `shutil` for file and directory manipulation
 - `seaborn` for confusion matrix
-- `transformers` for embeddings
-- `logging` to hide warnings
-- `joblib` to save and load models
 ---
 
 ### Code structure
@@ -117,7 +113,6 @@ main_repository/
 |   ├── _static/..
 |   ├── .buildinfo
 |   ├── data_classes.html
-|   ├── extract_representations.html
 |   ├── genindex.html
 |   ├── index.html
 |   ├── model_classes.html
@@ -131,13 +126,8 @@ main_repository/
 |   ├── utils.html
 |
 |
-├── extract_representations/
-|   ├── vision_embeddings.py
-|
-|
 ├── model_classes/
 |   ├── resnet_model.py
-|   ├── CNN_model.py
 |
 |
 ├── classify.py
@@ -155,24 +145,23 @@ main_repository/
 - `config/` contains the configuration parameters.
 - `data_classes/` contains the classe for managing the dataset.
 - `docs/` contains project documentation.
-- `extract_representations/` contains classes to manage embeddings for the SVM model.
-- `model_classes/` contains the classes for the models design.
+- `model_classes/` contains the classes for the model design.
 - `classify.py` is the script for classification.
 - `LICENCE/` contains the license to use the project.
 - `prepare.sh` is a script for setting up the environment installing the requirements.
 - `README.md` is the file you are currently reading.
 - `requirements.txt` contains the list of dependencies for the project.
 - `utils.py` is the script that evaluates the performance metrics, print them and contain other useful functions.
-- `train.py` is the script for training the models.
-- `test.py` is the script for testing the models.
+- `train.py` is the script for training the model.
+- `test.py` is the script for testing the model.
 
 
 > [!IMPORTANT]  
 > After executing the script train.py to the entire local running directory, additional folders will be generated: checkpoints, dataset and graph
 
-- `checkpoints/` this folder could contain two files in .pt format that represent the saving of the weights of the best models found during training. It also could contain .joblib and .pkl files used by SVM model. 
+- `checkpoints/` this folder could contain a file in .pt format that represent the saving of the weights of the best model found during training. 
 - `dataset/` this folder contains the dataset already divided into train, val and test.
-- `graph/` this folder contains the graphs that originated from the manipulation of the dataset, the training, comparison and testing phases.
+- `graph/` this folder contains the graphs that originated from the manipulation of the dataset, the training and the testing phases.
 
 ### Automatic classification
 
@@ -190,12 +179,8 @@ Through the use of the base_config.yaml file, it is possible to modify the confi
 
 - `create_dataset_graph` you can choose to create [TRUE] or not [FALSE] dataset graph.
 - `view_dataset_graph` you can choose to view [TRUE] or not [FALSE] dataset graph during execution.
-- `model_to_train` you can choose the model you want to train.
-- `model_to_test` you can choose the model you want to test if they have been correct trained yet.
-- `create_model_graph` you can choose to create [TRUE] or not [FALSE] models graph.
-- `view_model_graph` you can choose to view [TRUE] or not [FALSE] models graph.
-- `create_compare_graph` you can choose to create [TRUE] or not [FALSE] compare graph.
-- `view_compare_graph` you can choose to view [TRUE] or not [FALSE] compare graph.
+- `create_model_graph` you can choose to create [TRUE] or not [FALSE] model graph.
+- `view_model_graph` you can choose to view [TRUE] or not [FALSE] model graph.
 - `metric_plotted_during_traininig` you can select the only performance metrics you prefer to view.
 - `epochs` you can choose number of epochs based on your device computing capacity.
 - `early_stopping_metric` you can choose the metric against which you want to check for performance improvement according to early stopping.
