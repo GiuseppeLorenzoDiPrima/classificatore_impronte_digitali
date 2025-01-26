@@ -42,7 +42,7 @@ Before you can proceed with the classification of fingerprints, it is necessary 
 
 The dataset is managed by the `manage_dataset.py` class, while the custom model is defined in the `resnet_model.py`.
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 > To reproduce the project, you need to run the following commands to include the configuration file:
 >
 >\>>> python -u train.py -c config/base_config.yaml
@@ -54,10 +54,15 @@ The main idea is that, the project can be reproduced by running the following co
 ```bash
 git clone https://github.com/GiuseppeLorenzoDiPrima/classificatore_impronte_digitali.git
 cd classificatore_impronte_digitali
-bash prepare.sh
+.\prepare.bat
 python train.py
 python test.py
 ```
+> [!IMPORTANT]
+> The .\prepare.bat command is available only for the Windows environment. If you are running the code from a unix-like environment, you will need to replace the .\prepare.bat command with the command:<br>
+> bash prepare.sh
+
+<br>
 
 > [!CAUTION]
 >  You must have a version of git installed that is compatible with your operating system to perform the git clone operation.
